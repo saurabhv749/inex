@@ -27,7 +27,7 @@ function Overview({
 }: OverviewProps) {
     const expenseIncomeRatio = (totalExpenses / totalIncome).toFixed(2)
     const currentDate = new Date();
-    const dailyAvgExpense = (totalExpenses / currentDate.getDate())
+    const dailyAvgExpense = (totalExpenses / currentDate.getDate()).toFixed(1)
     const month = new Intl.DateTimeFormat('en', { month: "long", year: '2-digit' }).format()
 
     const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;

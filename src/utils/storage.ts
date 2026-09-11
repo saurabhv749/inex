@@ -43,7 +43,6 @@ function isFinanceData(value: unknown): value is FinanceData {
         preferences !== undefined &&
         (preferences.theme === 'light' || preferences.theme === 'dark'
         ) &&
-        typeof preferences.carryOver === 'boolean' &&
         typeof preferences.decimalPlaces === 'number' &&
         typeof preferences.currencySign === 'string'
     );

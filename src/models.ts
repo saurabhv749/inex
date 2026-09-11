@@ -26,7 +26,6 @@ export interface Category {
 
 export interface Preferences {
     theme: 'light' | 'dark';
-    carryOver: boolean;
     decimalPlaces: number;
     currencySign: string;
 }
@@ -44,7 +43,6 @@ export const defaultFinanceData: FinanceData = {
     categories: [],
     preferences: {
         theme: 'light',
-        carryOver: true,
         decimalPlaces: 2,
         currencySign: '$',
     },
