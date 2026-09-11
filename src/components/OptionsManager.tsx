@@ -12,7 +12,7 @@ interface OptionsManagerProps {
 
 function OptionsManager({ section, records, recordError, addHandler, addRecordHandler, removeRecordHandler }: OptionsManagerProps) {
     const types = ["expense", "income"]
-    const groupedRecords: (Account | Category)[] = []
+    let groupedRecords: (Account | Category)[] = []
 
     const isCategories = section.toLowerCase() === "categories"
     if (isCategories) {
@@ -20,6 +20,9 @@ function OptionsManager({ section, records, recordError, addHandler, addRecordHa
             (records as Category[]).forEach(record => { if (record.type === categoryType) groupedRecords.push(record) })
         })
     }
+    else
+        groupedRecords = records as Account[]
+
 
     return (
         <section className="page-panel">
