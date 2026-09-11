@@ -9,6 +9,7 @@ import { RecordModal, TransactionModal } from './components/Modal'
 import EmptyState from './components/EmptyState';
 import Transactions from './components/Transactions';
 import OptionsManager from './components/OptionsManager';
+import SearchBar from './components/SearchBar';
 
 type View = 'Overview' | 'Transactions' | 'Accounts' | 'Categories';
 type Modal = 'transaction' | 'account' | 'category' | null;
@@ -16,6 +17,7 @@ type Modal = 'transaction' | 'account' | 'category' | null;
 const navigationItems: View[] = ['Overview', 'Transactions', 'Categories', 'Accounts'];
 const createId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 const now = () => new Date().toISOString();
+const dateInputValue = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 function emptyTransaction(): Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'> {
     return { date: new Date().toISOString().slice(0, 16), accountId: '', type: 'expense', categoryId: '', amount: 0, notes: '' };
@@ -29,6 +31,12 @@ export function App() {
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [transactionDraft, setTransactionDraft] = useState(emptyTransaction);
     const [recordError, setRecordError] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [typeFilter, setTypeFilter] = useState('');
+    const [accountFilter, setAccountFilter] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
+    const [fromDate, setFromDate] = useState(() => dateInputValue(new Date(new Date().getFullYear(), new Date().getMonth(), 1)));
+    const [toDate, setToDate] = useState(() => dateInputValue(new Date()));
 
     useEffect(() => saveFinanceData(data), [data]);
 
@@ -129,7 +137,7 @@ export function App() {
             return <EmptyState onAdd={() => openTransaction()} />
 
         // sort by date: newest first
-        transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        transactions = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         return <TransactionList
             transactions={transactions}
@@ -157,9 +165,61 @@ export function App() {
     }
 
     function renderTransactions() {
+        const normalizedQuery = searchQuery.trim().toLowerCase();
+        const filteredTransactions = data.transactions.filter((transaction) => {
+            const transactionDate = transaction.date.slice(0, 10);
+            const searchableText = [
+                transaction.notes,
+                transaction.type,
+                transaction.amount.toString(),
+                transaction.date,
+                accountName(transaction.accountId),
+                categoryName(transaction.categoryId),
+            ].join(' ').toLowerCase();
+
+            return transactionDate >= fromDate
+                && transactionDate <= toDate
+                && (!normalizedQuery || searchableText.includes(normalizedQuery))
+                && (!typeFilter || transaction.type === typeFilter)
+                && (!accountFilter || transaction.accountId === accountFilter)
+                && (!categoryFilter || transaction.categoryId === categoryFilter);
+        });
+
+        const totalExpenses = filteredTransactions
+            .filter((item) => item.type === 'expense')
+            .reduce((sum, item) => sum + item.amount, 0);
+        const totalIncome = filteredTransactions
+            .filter((item) => item.type === 'income')
+            .reduce((sum, item) => sum + item.amount, 0);
+
+
         return <Transactions
-            transactionListItems={renderTransactionList(currentMonthTransactions)}
+            transactionListItems={renderTransactionList(filteredTransactions)}
             addTransactionHandler={() => openTransaction()}
+            searchQuery={searchQuery}
+            typeFilter={typeFilter}
+            accountFilter={accountFilter}
+            categoryFilter={categoryFilter}
+            onTypeFilterChange={setTypeFilter}
+            onAccountFilterChange={setAccountFilter}
+            onCategoryFilterChange={setCategoryFilter}
+            fromDate={fromDate}
+            toDate={toDate}
+            onFromDateChange={setFromDate}
+            onToDateChange={setToDate}
+            accounts={data.accounts}
+            categories={data.categories}
+            resultCount={filteredTransactions.length}
+            totalExpense={totalExpenses}
+            totalIncome={totalIncome}
+            onClearFilters={() => {
+                setSearchQuery('');
+                setTypeFilter('');
+                setAccountFilter('');
+                setCategoryFilter('');
+                setFromDate(dateInputValue(new Date(new Date().getFullYear(), new Date().getMonth(), 1)));
+                setToDate(dateInputValue(new Date()));
+            }}
         />
     }
 
@@ -228,6 +288,13 @@ export function App() {
 
                     </div>
                 </header>
+                <SearchBar
+                    value={searchQuery}
+                    onChange={(value) => {
+                        setSearchQuery(value);
+                        if (value.trim()) setActiveView('Transactions');
+                    }}
+                />
 
                 {
                     activeView === 'Overview' ? renderOverview() : activeView === 'Transactions' ? renderTransactions() : renderOptionsManager(activeView.toLowerCase() as 'accounts' | 'categories')
