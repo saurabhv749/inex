@@ -11,6 +11,18 @@ interface OptionsManagerProps {
 }
 
 function OptionsManager({ section, records, recordError, addHandler, addRecordHandler, removeRecordHandler }: OptionsManagerProps) {
+    const types = ["expense", "income"]
+    let groupedRecords: (Account | Category)[] = []
+
+    const isCategories = section.toLowerCase() === "categories"
+    if (isCategories) {
+        types.forEach(categoryType => {
+            (records as Category[]).forEach(record => { if (record.type === categoryType) groupedRecords.push(record) })
+        })
+    }
+    else
+        groupedRecords = records as Account[]
+
 
     return (
         <section className="page-panel">
@@ -31,9 +43,9 @@ function OptionsManager({ section, records, recordError, addHandler, addRecordHa
                             type="button">Create your first
                         </button>
                     </div>
-                ) : records.map((record) => (
+                ) : groupedRecords.map((record) => (
                     <div className="manage-row" key={record.id}>
-                        <span className="record-icon">
+                        <span className={"record-icon " + (isCategories ? (record as Category).type : "")}>
                             {record.icon === 'wallet' ? 'W' : record.icon === 'tag' ? '#' : record.icon.charAt(0).toUpperCase()
                             }
                         </span>
