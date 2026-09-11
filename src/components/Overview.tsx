@@ -1,17 +1,38 @@
 import { ReactNode } from "react";
 import MetricCard from "./MetricCard";
 import SectionHeading from "./SectionHeading";
+import MonthlyCashFlowChart from "./MonthlyCashFlowChart";
+import ExpenseDonutChart from "./ExpenseDonutChart";
+import DailySpendingComparison from "./DailySpendingComparison";
+import { Category, Transaction } from "../models";
 
 interface OverviewProps {
     currency: string;
     totalIncome: number;
     totalExpenses: number;
-    transactionCount: number;
     viewAllHandler: () => void;
     transactionListItems: ReactNode;
+    transactions: Transaction[];
+    categories: Category[];
 }
 
-function Overview({ currency, totalExpenses, totalIncome, transactionCount, viewAllHandler, transactionListItems }: OverviewProps) {
+function Overview({
+    currency,
+    totalExpenses,
+    totalIncome,
+    viewAllHandler,
+    transactionListItems,
+    transactions,
+    categories,
+}: OverviewProps) {
+    const expenseIncomeRatio = (totalExpenses / totalIncome).toFixed(2)
+    const currentDate = new Date();
+    const dailyAvgExpense = (totalExpenses / currentDate.getDate())
+    const month = new Intl.DateTimeFormat('en', { month: "long", year: '2-digit' }).format()
+
+    const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    const monthTransactions = transactions.filter((item) => item.date.slice(0, 7) === monthKey);
+
 
     return (
         <div className="content-grid">
@@ -25,11 +46,22 @@ function Overview({ currency, totalExpenses, totalIncome, transactionCount, view
                     <span /><span /><span /><span /><span />
                 </div>
             </section>
+            <MetricCard label=""
+                value={`Metrices for ${month}`}
+                observations={[]} symbol="" />
 
-            <MetricCard label="Current balance" value={`${currency}${(totalIncome - totalExpenses).toFixed(2)}`} hint="Across all accounts" symbol="" />
-            <MetricCard label="Income" value={`${currency}${totalIncome.toFixed(2)}`} hint="All recorded income" symbol="+" />
-            <MetricCard label="Expenses" value={`${currency}${totalExpenses.toFixed(2)}`} hint="All recorded expenses" symbol="-" />
+            <MetricCard label="Income" type="income"
+                value={`${currency}${totalIncome.toFixed(2)}`}
+                observations={["All recorded income"]} symbol="+" />
 
+            <MetricCard label="Expenses"
+                value={`${currency}${totalExpenses.toFixed(2)}`} type="expense"
+                observations={[`Expense/Income ratio: ${expenseIncomeRatio}`, `Average daily spending: ${currency}${dailyAvgExpense}`]} symbol="-" />
+
+            <MetricCard label="Current balance" type="income"
+                value={`${currency}${(totalIncome - totalExpenses).toFixed(2)}`} observations={["Your net cash flow across all accounts."]} symbol="" />
+
+            {/* recent transactions */}
             <section className="activity-panel">
                 <SectionHeading eyebrow="Your money trail" title="Recent transactions"
                     action={
@@ -42,23 +74,26 @@ function Overview({ currency, totalExpenses, totalIncome, transactionCount, view
                     transactionListItems
                 }
             </section>
+
             <section className="insight-panel">
                 <SectionHeading eyebrow="At a glance" title="Monthly rhythm"
                     action={
-                        <span className="period-label">Now</span>
+                        <span className="period-label">{month}</span>
                     }
                 />
-                <div className="chart-placeholder">
-                    <div className="chart-lines">
-                        <span /><span /><span /><span />
-                    </div>
-                    <p>{
-                        transactionCount ?
-                            `${transactionCount} transaction${transactionCount === 1 ? '' : 's'} recorded.` :
-                            <span> Start adding transactions<br />to see your rhythm.</span>
-                    }</p>
-                </div>
+                <MonthlyCashFlowChart currency={currency} transactions={monthTransactions} />
             </section>
+
+            <section className="insight-panel donut-panel">
+                <SectionHeading eyebrow="Spending" title="Category mix"
+                    action={
+                        <span className="period-label">{month}</span>
+                    }
+                />
+                <ExpenseDonutChart currency={currency} transactions={monthTransactions} categories={categories} />
+            </section>
+            {/* current + previous month transactions */}
+            <DailySpendingComparison currency={currency} transactions={transactions} />
         </div>
     )
 }

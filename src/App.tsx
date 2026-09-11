@@ -33,8 +33,15 @@ export function App() {
     useEffect(() => saveFinanceData(data), [data]);
 
     const currency = data.preferences.currencySign;
-    const totalIncome = data.transactions.filter((item) => item.type === 'income').reduce((sum, item) => sum + item.amount, 0);
-    const totalExpenses = data.transactions.filter((item) => item.type === 'expense').reduce((sum, item) => sum + item.amount, 0);
+    const currentDate = new Date();
+    const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    const currentMonthTransactions = data.transactions.filter((item) => item.date.slice(0, 7) === currentMonthKey);
+    const totalIncome = currentMonthTransactions
+        .filter((item) => item.type === 'income')
+        .reduce((sum, item) => sum + item.amount, 0);
+    const totalExpenses = currentMonthTransactions
+        .filter((item) => item.type === 'expense')
+        .reduce((sum, item) => sum + item.amount, 0);
     // map account/category to get name: account.id -> account.name
     const accountName = (id: string) => data.accounts.find((item) => item.id === id)?.name ?? 'Unassigned account';
     const categoryName = (id: string) => data.categories.find((item) => item.id === id)?.name ?? 'Uncategorized';
@@ -119,7 +126,10 @@ export function App() {
     // util
     function renderTransactionList(transactions: Transaction[]) {
         if (transactions.length === 0)
-            return <EmptyState onAdd={openTransaction} />
+            return <EmptyState onAdd={() => openTransaction()} />
+
+        // sort by date: newest first
+        transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         return <TransactionList
             transactions={transactions}
@@ -132,22 +142,23 @@ export function App() {
     }
     // screens
     function renderOverview() {
-        const recentTransactions = data.transactions.slice(0, 5);
+        const recentTransactions = currentMonthTransactions.slice(0, 5);
 
         return <Overview
             currency={currency}
             totalIncome={totalIncome}
             totalExpenses={totalExpenses}
-            transactionCount={recentTransactions.length}
             viewAllHandler={() => setActiveView('Transactions')}
             transactionListItems={renderTransactionList(recentTransactions)}
+            // all transactions
+            transactions={data.transactions}
+            categories={data.categories}
         />
     }
 
     function renderTransactions() {
-        const allTransactions = data.transactions
         return <Transactions
-            transactionListItems={renderTransactionList(allTransactions)}
+            transactionListItems={renderTransactionList(currentMonthTransactions)}
             addTransactionHandler={() => openTransaction()}
         />
     }
