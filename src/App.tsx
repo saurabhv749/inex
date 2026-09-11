@@ -110,9 +110,9 @@ export function App() {
         closeModal();
     }
 
-    function saveCategory(name: string, icon: string) {
+    function saveCategory(name: string, icon: string, type: string) {
         if (!name.trim()) return;
-        setData((current) => ({ ...current, categories: [...current.categories, { id: createId(), name: name.trim(), icon: icon || 'tag' }] }));
+        setData((current) => ({ ...current, categories: [...current.categories, { id: createId(), name: name.trim(), icon: icon || 'tag', type }] }));
         closeModal();
     }
 
@@ -227,7 +227,7 @@ export function App() {
         const isAccounts = kind === 'accounts';
         const records = isAccounts ? data.accounts : data.categories;
         const title = isAccounts ? 'Accounts' : 'Categories'
-
+        const deleteFunction = (record: any) => isAccounts ? deleteAccount(record) : deleteCategory(record)
         return <OptionsManager
             section={title}
             records={records}
@@ -238,7 +238,7 @@ export function App() {
             }
             }
             addRecordHandler={() => setModal(isAccounts ? 'account' : 'category')}
-            removeRecordHandler={() => isAccounts ? deleteAccount : deleteCategory}
+            removeRecordHandler={deleteFunction}
         />
     }
 
@@ -310,11 +310,11 @@ export function App() {
 
             {
                 modal === 'account' && <RecordModal title="Add account" label="Account name"
-                    onClose={closeModal} onSubmit={saveAccount} />
+                    onClose={closeModal} onSubmit={saveAccount} isCategory={false} />
             }
             {
                 modal === 'category' && <RecordModal title="Add category" label="Category name"
-                    onClose={closeModal} onSubmit={saveCategory} />
+                    onClose={closeModal} onSubmit={saveCategory} isCategory={true} />
             }
         </div>
     )

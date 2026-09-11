@@ -1,4 +1,4 @@
-import { SubmitEvent } from "react";
+import { ChangeEvent, SubmitEvent, useState } from "react";
 import { TransactionType, Transaction, Account, Category } from "../models";
 import ModalShell from "./ModalShell";
 
@@ -17,6 +17,17 @@ interface TransactionModalProps {
 function TransactionModal({
     draft, setDraft, accounts, categories, error, editing, onClose, onSubmit }: TransactionModalProps
 ) {
+    const [validCategories, setValidCategories] = useState(
+        categories.filter(c => c.type == "expense")
+    )
+
+    const typeChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
+        const newType = event.target.value as TransactionType
+        setDraft({ ...draft, type: newType })
+        setValidCategories(
+            categories.filter(c => c.type == newType)
+        )
+    }
 
     return <ModalShell
         title={editing ? 'Edit transaction' : 'Add transaction'}
@@ -28,7 +39,7 @@ function TransactionModal({
             </label>
             <label>Type
                 <select value={draft.type}
-                    onChange={(event) => setDraft({ ...draft, type: event.target.value as TransactionType })}>
+                    onChange={typeChangeHandler}>
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
@@ -45,7 +56,10 @@ function TransactionModal({
 
             <label>Category
                 <select required value={draft.categoryId} onChange={(event) => setDraft({ ...draft, categoryId: event.target.value })}>
-                    <option value="">Select category</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+                    <option value="">Select category</option>
+                    {
+                        validCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)
+                    }
                 </select>
             </label>
             <label className="wide-field">Amount

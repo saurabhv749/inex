@@ -1173,6 +1173,11 @@ button:focus-visible {
   width: 32px;
 }
 
+.record-icon.expense {
+  color: #e75c25;
+  background-color: #ffdaaa;
+}
+
 .manager-empty {
   align-items: center;
   color: var(--muted);

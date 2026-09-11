@@ -22,6 +22,7 @@ export interface Category {
     id: string;
     name: string;
     icon: string;
+    type: TransactionType | string;
 }
 
 export interface Preferences {
