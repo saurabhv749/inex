@@ -143,6 +143,32 @@ button:focus-visible {
   margin-top: auto;
 }
 
+.preferences-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  gap: 13px;
+  margin-top: 20px;
+  padding: 20px 14px 0;
+  text-align: left;
+  width: 100%;
+}
+
+.preferences-button:hover {
+  color: var(--primary-deep);
+}
+
+.preferences-button:focus-visible {
+  border-radius: 9px;
+  outline-offset: 2px;
+}
+
 .profile-button {
   align-items: center;
   background: transparent;
@@ -786,6 +812,10 @@ button:focus-visible {
   width: 100%;
 }
 
+.display-mobile {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .sidebar {
     width: 210px;
@@ -859,7 +889,6 @@ button:focus-visible {
   }
 
   .button-primary {
-    font-size: 0;
     padding: 12px;
   }
 
@@ -899,6 +928,10 @@ button:focus-visible {
 
   .result-summary {
     justify-content: space-between;
+  }
+
+  .display-mobile {
+    display: block;
   }
 }
 
@@ -1282,6 +1315,70 @@ button:focus-visible {
 
 .wide-field {
   grid-column: 1 / -1;
+}
+
+.preference-switch {
+  align-items: center;
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  flex-direction: row !important;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 10px 11px;
+}
+
+.preference-switch span {
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.preference-switch strong {
+  font-size: 13px;
+}
+
+.preference-switch input {
+  appearance: none;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  height: 24px;
+  margin: 0;
+  min-height: 0;
+  padding: 2px;
+  position: relative;
+  transition: background 160ms ease, border-color 160ms ease;
+  width: 42px;
+}
+
+.preference-switch input::before {
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(20, 28, 23, .2);
+  content: '';
+  display: block;
+  height: 18px;
+  transform: translateX(0);
+  transition: transform 160ms ease;
+  width: 18px;
+}
+
+.preference-switch input:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.preference-switch input:checked::before {
+  transform: translateX(18px);
+}
+
+.preference-switch input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .modal-actions {

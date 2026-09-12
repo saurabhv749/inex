@@ -66,6 +66,6 @@ export const defaultFinanceData: FinanceData = {
     preferences: {
         theme: 'light',
         decimalPlaces: 2,
-        currencySign: '$',
+        currencySign: "₹",
     },
 };

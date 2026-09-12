@@ -1,18 +1,18 @@
 import './App.css';
 import { SubmitEvent, useEffect, useState } from 'react';
-import { Account, Category, FinanceData, Transaction } from './models';
+import { Account, Category, FinanceData, Preferences, Transaction } from './models';
 import { loadFinanceData, saveFinanceData } from './utils/storage';
 
 import TransactionList from './components/TransactionList';
 import Overview from './components/Overview';
-import { RecordModal, TransactionModal } from './components/Modal'
+import { PreferencesModal, RecordModal, TransactionModal } from './components/Modal'
 import EmptyState from './components/EmptyState';
 import Transactions from './components/Transactions';
 import OptionsManager from './components/OptionsManager';
 import SearchBar from './components/SearchBar';
 
 type View = 'Overview' | 'Transactions' | 'Accounts' | 'Categories';
-type Modal = 'transaction' | 'account' | 'category' | null;
+type Modal = 'transaction' | 'account' | 'category' | 'preferences' | null;
 
 const navigationItems: View[] = ['Overview', 'Transactions', 'Categories', 'Accounts'];
 const createId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -25,7 +25,6 @@ function emptyTransaction(): Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>
 
 export function App() {
     const [activeView, setActiveView] = useState<View>('Overview');
-    const [isDark, setIsDark] = useState(false);
     const [data, setData] = useState<FinanceData>(() => loadFinanceData());
     const [modal, setModal] = useState<Modal>(null);
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -72,6 +71,11 @@ export function App() {
     function closeModal() {
         setModal(null);
         setRecordError('');
+    }
+
+    function savePreferences(preferences: Preferences) {
+        setData((current) => ({ ...current, preferences }));
+        closeModal();
     }
 
     function saveTransaction(event: SubmitEvent<HTMLFormElement>) {
@@ -243,7 +247,7 @@ export function App() {
     }
 
     return (
-        <div className={isDark ? 'app-shell theme-dark' : 'app-shell'}>
+        <div className={data.preferences.theme === 'dark' ? 'app-shell theme-dark' : 'app-shell'}>
             <aside className="sidebar">
                 <div className="brand">
                     <span className="brand-mark">IE</span>
@@ -259,15 +263,15 @@ export function App() {
                             </span>{item}
                         </button>)
                     }
+                    <button className="nav-item display-mobile" onClick={() => setModal('preferences')} type="button">
+                        <span className="nav-icon" aria-hidden="true">*</span>
+                        <span>Preferences</span>
+                    </button>
                 </nav>
                 <div className="sidebar-footer">
-                    <button className="profile-button" type="button">
-                        <span className="avatar">YO</span>
-                        <span className="profile-copy">
-                            <strong>Your account</strong>
-                            <small>Personal space</small>
-                        </span>
-                        <span aria-hidden="true">...</span>
+                    <button className="preferences-button" onClick={() => setModal('preferences')} type="button">
+                        <span className="nav-icon" aria-hidden="true">*</span>
+                        <span>Preferences</span>
                     </button>
                 </div>
             </aside>
@@ -278,12 +282,6 @@ export function App() {
                         <h1>{activeView}</h1>
                     </div>
                     <div className="topbar-actions">
-                        <button aria-label="Toggle colour theme" className="icon-button"
-                            onClick={() => setIsDark((current) => !current)}
-                            title="Toggle colour theme" type="button">
-                            {isDark ? 'L' : 'D'}
-                        </button>
-
                         <button className="button button-primary" onClick={() => openTransaction()} type="button"><span aria-hidden="true">+</span> Add transaction</button>
 
                     </div>
@@ -316,6 +314,12 @@ export function App() {
                 modal === 'category' && <RecordModal title="Add category" label="Category name"
                     onClose={closeModal} onSubmit={saveCategory} isCategory={true} />
             }
-        </div>
+            {
+                modal === 'preferences' && <PreferencesModal
+                    preferences={data.preferences}
+                    onClose={closeModal}
+                    onSave={savePreferences} />
+            }
+        </div >
     )
 }
