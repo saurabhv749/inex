@@ -26,6 +26,8 @@ interface TransactionsProps {
     totalIncome: number;
     totalExpense: number;
     onClearFilters: () => void;
+    exportCsv: () => void;
+    importCsv: () => void;
 }
 
 function Transactions({
@@ -48,6 +50,8 @@ function Transactions({
     totalExpense,
     totalIncome,
     onClearFilters,
+    exportCsv,
+    importCsv,
 }: TransactionsProps) {
     const hasFilters = Boolean(searchQuery || typeFilter || accountFilter || categoryFilter);
     const formattedFromDate = fromDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${fromDate}T00:00:00`)) : 'Any date';
@@ -59,12 +63,7 @@ function Transactions({
                 <SectionHeading
                     eyebrow="Money trail"
                     title="Transactions"
-                    action={
-                        <button className="button button-primary"
-                            onClick={addTransactionHandler}
-                            type="button">+ Add transaction
-                        </button>
-                    }
+                    action={<></>}
                 />
 
                 <div className="transaction-toolbar">
@@ -126,6 +125,14 @@ function Transactions({
                 </div>
 
             </section>
+            <section >
+                <div className="transactions-summary import-export" >
+                    <span className="row-spacer">Download or upload transactions in csv format.</span>
+                    <button type="button" className="button button-primary" onClick={exportCsv}>Export</button>
+                    <button type="button" className="button button-secondary" onClick={importCsv}>Import</button>
+                </div>
+            </section>
+
         </>)
 }
 

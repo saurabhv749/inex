@@ -1,11 +1,11 @@
 import { Transaction } from '../models';
 
 interface MonthlyCashFlowChartProps {
-    currency: string;
+    formatAmount: (amount: number) => string;
     transactions: Transaction[];
 }
 
-function MonthlyCashFlowChart({ currency, transactions }: MonthlyCashFlowChartProps) {
+function MonthlyCashFlowChart({ formatAmount, transactions }: MonthlyCashFlowChartProps) {
 
     const income = transactions
         .filter((item) => item.type === 'income')
@@ -39,14 +39,14 @@ function MonthlyCashFlowChart({ currency, transactions }: MonthlyCashFlowChartPr
                             <span
                                 className="cashflow-segment expense-segment"
                                 style={{ height: `${Math.max((expense / total) * 100, 12)}%` }}
-                                title={`Expenses ${currency}${expense.toFixed(2)}`}
+                                title={`Expenses ${formatAmount(expense)}`}
                             />
                         )}
                         {saving > 0 && (
                             <span
                                 className="cashflow-segment saving-segment"
                                 style={{ height: `${Math.max((saving / total) * 100, 12)}%` }}
-                                title={`Savings ${currency}${saving.toFixed(2)}`}
+                                title={`Savings ${formatAmount(saving)}`}
                             />
                         )}
                     </div>
@@ -57,18 +57,18 @@ function MonthlyCashFlowChart({ currency, transactions }: MonthlyCashFlowChartPr
                 <div className="cashflow-total-row">
                     <span className="legend-dot income-dot" />
                     <span>Income</span>
-                    <em>{currency}{income.toFixed(2)}</em>
+                    <em>{formatAmount(income)}</em>
                 </div>
                 <div className="cashflow-total-row">
                     <span className="legend-dot expense-dot" />
                     <span>Expense ({expenseShare}%)</span>
-                    <em>{currency}{expense.toFixed(2)}</em>
+                    <em>{formatAmount(expense)}</em>
                 </div>
                 <br />
                 <div className="cashflow-total-row">
                     <span className="legend-dot saving-dot" />
                     <span>Saved ({savingShare}%)</span>
-                    <em>{currency}{saving.toFixed(2)}</em>
+                    <em>{formatAmount(saving)}</em>
                 </div>
             </div>
         </div>
