@@ -72,11 +72,11 @@ export function exportFinanceData(data: FinanceData): string {
     return JSON.stringify(data, null, 2);
 }
 
-export function importFinanceData(serializedData: string): FinanceData {
+export function importFinanceData(serializedData: string): boolean {
     const parsed: unknown = JSON.parse(serializedData);
     if (!isFinanceData(parsed)) {
         throw new Error('The selected file is not a valid Finance Tracker export.');
     }
-
-    return parsed;
+    saveFinanceData(parsed)
+    return true
 }

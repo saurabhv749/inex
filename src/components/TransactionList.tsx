@@ -4,14 +4,14 @@ interface TransactionListProps {
     transactions: Transaction[];
     accountName: (id: string) => string;
     categoryName: (id: string) => string;
-    currency: string;
     onEdit: (item: Transaction) => void;
-    onDelete: (id: string) => void
+    onDelete: (id: string) => void;
+    formatAmount: (amount: number) => string;
 }
 
 const formatDate = (date: string) => new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(date));
 
-function TransactionList({ transactions, accountName, categoryName, currency, onEdit, onDelete }: TransactionListProps) {
+function TransactionList({ transactions, accountName, categoryName, onEdit, onDelete, formatAmount }: TransactionListProps) {
     return <div className="transaction-list">
         {transactions.map((transaction) => <div className="transaction-row" key={transaction.id}>
             <span className={transaction.type === 'income' ? 'transaction-symbol income' : 'transaction-symbol expense'}>
@@ -21,7 +21,8 @@ function TransactionList({ transactions, accountName, categoryName, currency, on
                 <small>{accountName(transaction.accountId)} · {formatDate(transaction.date)}{transaction.notes ? ` · ${transaction.notes}` : ''}</small>
             </span>
             <strong className={transaction.type === 'income' ? 'amount income-text' : 'amount'}>
-                {transaction.type === 'income' ? '+' : '-'}{currency}{transaction.amount.toFixed(2)}
+                {transaction.type === 'income' ? '+' : '-'}
+                {formatAmount(transaction.amount)}
             </strong>
             <button className="row-action" onClick={() => onEdit(transaction)} type="button">Edit</button>
             <button className="row-action danger" onClick={() => onDelete(transaction.id)} type="button">Delete</button>

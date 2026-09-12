@@ -10,6 +10,7 @@ import EmptyState from './components/EmptyState';
 import Transactions from './components/Transactions';
 import OptionsManager from './components/OptionsManager';
 import SearchBar from './components/SearchBar';
+import { downloadJsonFile, downloadTransactionsCsv, selectImportFile, uploadJsonFile, uploadTransactionsCsv } from './utils/file';
 
 type View = 'Overview' | 'Transactions' | 'Accounts' | 'Categories';
 type Modal = 'transaction' | 'account' | 'category' | 'preferences' | null;
@@ -40,6 +41,7 @@ export function App() {
     useEffect(() => saveFinanceData(data), [data]);
 
     const currency = data.preferences.currencySign;
+    const formatAmount = (amount: number): string => `${currency}${amount.toFixed(2)}`
     const currentDate = new Date();
     const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     const currentMonthTransactions = data.transactions.filter((item) => item.date.slice(0, 7) === currentMonthKey);
@@ -147,7 +149,7 @@ export function App() {
             transactions={transactions}
             accountName={accountName}
             categoryName={categoryName}
-            currency={currency}
+            formatAmount={formatAmount}
             onEdit={openTransaction}
             onDelete={deleteTransaction}
         />
@@ -155,9 +157,23 @@ export function App() {
     // screens
     function renderOverview() {
         const recentTransactions = currentMonthTransactions.slice(0, 5);
+        const exportJSON = () => {
+            downloadJsonFile(data);
+        };
+        const importJSON = async () => {
+            const file = await selectImportFile('json');
+            if (!file) return;
+
+            try {
+                await uploadJsonFile(file);
+                setData(loadFinanceData());
+            } catch (error) {
+                window.alert(error instanceof Error ? error.message : 'The selected JSON file could not be imported.');
+            }
+        };
 
         return <Overview
-            currency={currency}
+            formatAmount={formatAmount}
             totalIncome={totalIncome}
             totalExpenses={totalExpenses}
             viewAllHandler={() => setActiveView('Transactions')}
@@ -165,6 +181,8 @@ export function App() {
             // all transactions
             transactions={data.transactions}
             categories={data.categories}
+            exportJSON={exportJSON}
+            importJSON={importJSON}
         />
     }
 
@@ -196,10 +214,27 @@ export function App() {
             .filter((item) => item.type === 'income')
             .reduce((sum, item) => sum + item.amount, 0);
 
+        // Transaction Helpers
+        const exportCsv = () => {
+            downloadTransactionsCsv(filteredTransactions, `transactions-${currentMonthKey}.csv`);
+        }
+        const importCsv = async () => {
+            const file = await selectImportFile('csv');
+            if (!file) return;
+
+            try {
+                await uploadTransactionsCsv(file);
+                setData(loadFinanceData());
+            } catch (error) {
+                window.alert(error instanceof Error ? error.message : 'The selected CSV could not be imported.');
+            }
+        }
 
         return <Transactions
             transactionListItems={renderTransactionList(filteredTransactions)}
             addTransactionHandler={() => openTransaction()}
+            exportCsv={exportCsv}
+            importCsv={importCsv}
             searchQuery={searchQuery}
             typeFilter={typeFilter}
             accountFilter={accountFilter}

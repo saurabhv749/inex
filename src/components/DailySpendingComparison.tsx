@@ -1,7 +1,7 @@
 import { Transaction } from '../models';
 
 interface DailySpendingComparisonProps {
-    currency: string;
+    formatAmount: (amount: number) => string;
     transactions: Transaction[];
 }
 
@@ -39,7 +39,7 @@ function getMonthSeries(transactions: Transaction[], date: Date, label: string):
     return { label, days, values, total: values.reduce((sum, value) => sum + value, 0) };
 }
 
-function DailySpendingComparison({ currency, transactions }: DailySpendingComparisonProps) {
+function DailySpendingComparison({ formatAmount, transactions }: DailySpendingComparisonProps) {
     const currentDate = new Date();
     const previousDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
     const currentMonth = getMonthSeries(
@@ -88,7 +88,7 @@ function DailySpendingComparison({ currency, transactions }: DailySpendingCompar
                             <g key={tick}>
                                 <line className="chart-grid-line" x1={padding.left} x2={chartWidth - padding.right} y1={y(tick)} y2={y(tick)} />
                                 <text className="chart-axis-label" x={padding.left - 10} y={y(tick) + 4} textAnchor="end">
-                                    {currency}{Math.round(tick)}
+                                    {formatAmount(Math.round(tick))}
                                 </text>
                             </g>
                         ))}
@@ -105,9 +105,9 @@ function DailySpendingComparison({ currency, transactions }: DailySpendingCompar
             )}
 
             <div className="comparison-summary">
-                <span><strong>{currency}{currentMonth.total.toFixed(2)}</strong> spent in {currentMonth.label}</span>
+                <span><strong>{formatAmount(currentMonth.total)}</strong> spent in {currentMonth.label}</span>
                 <br />
-                <span><strong>{currency}{previousMonth.total.toFixed(2)}</strong> spent in {previousMonth.label}</span>
+                <span><strong>{formatAmount(previousMonth.total)}</strong> spent in {previousMonth.label}</span>
             </div>
         </section>
     );

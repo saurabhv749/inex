@@ -1,14 +1,14 @@
 import { Category, Transaction } from '../models';
 
 interface ExpenseDonutChartProps {
-    currency: string;
+    formatAmount: (amount: number) => string;
     transactions: Transaction[];
     categories: Category[];
 }
 
 const donutPalette = ['#5c8c6c', '#7bbf9d', '#a9d8bb', '#d0edd7', '#f3c7a9', '#d18a62', '#f4e1cb'];
 
-function ExpenseDonutChart({ currency, transactions, categories }: ExpenseDonutChartProps) {
+function ExpenseDonutChart({ formatAmount, transactions, categories }: ExpenseDonutChartProps) {
     const categoryTotals = new Map<string, number>();
 
     transactions
@@ -73,7 +73,7 @@ function ExpenseDonutChart({ currency, transactions, categories }: ExpenseDonutC
                         );
                     })}
                     <text x="75" y="68" textAnchor="middle" className="donut-total-label">Total</text>
-                    <text x="75" y="90" textAnchor="middle" className="donut-total-value">{currency}{total.toFixed(2)}</text>
+                    <text x="75" y="90" textAnchor="middle" className="donut-total-value">{formatAmount(total)}</text>
                 </svg>
             </div>
 
@@ -82,7 +82,7 @@ function ExpenseDonutChart({ currency, transactions, categories }: ExpenseDonutC
                     <div key={item.id} className="expense-legend-item">
                         <span className="legend-dot" style={{ background: donutPalette[index % donutPalette.length] }} />
                         <span className="legend-name">{item.name} ({expensePercentage(item.value)})</span>
-                        <em>{currency}{item.value.toFixed(2)}</em>
+                        <em>{formatAmount(item.value)}</em>
                     </div>
                 ))}
             </div>

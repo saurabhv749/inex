@@ -1,4 +1,5 @@
 import { Transaction, TransactionType } from '../models';
+import { loadFinanceData, saveFinanceData } from './storage'
 
 const transactionHeaders = [
     'id',
@@ -59,15 +60,46 @@ export function exportTransactionsCsv(transactions: Transaction[]): string {
     return [transactionHeaders.join(','), ...rows.map((row) => row.join(','))].join('\n');
 }
 
-export function importTransactionsCsv(csv: string): Transaction[] {
+export function importTransactionsCsv(csv: string): boolean {
     const [headerRow, ...dataRows] = parseCsvRows(csv);
     if (!headerRow || headerRow.join(',') !== transactionHeaders.join(',')) {
         throw new Error('The selected CSV does not contain the expected transaction columns.');
     }
 
-    return dataRows.map((row) => {
+    const { accounts, categories, transactions, preferences } = loadFinanceData();
+    const importedTransactions: Transaction[] = [];
+    const importedAccountIds = new Set<string>();
+    const transactionIds = new Set(transactions.map((transaction) => transaction.id));
+
+    dataRows.forEach((row) => {
         if (row.length !== transactionHeaders.length || !['income', 'expense'].includes(row[3])) {
             throw new Error('The selected CSV contains an invalid transaction.');
+        }
+
+        if (transactionIds.has(row[0])) {
+            return; // no duplicate transaction
+        }
+
+        const accountId = row[2];
+        const categoryId = row[4];
+        const accountExists = accounts.some((account) => account.id === accountId);
+        const accountAlreadyImported = importedAccountIds.has(accountId);
+        const category = categories.find((item) => item.id === categoryId);
+        const transactionType = row[3] as TransactionType;
+
+        // insert new account or categories
+        if (!accountExists && !accountAlreadyImported) {
+            accounts.push({ id: accountId, name: accountId, icon: 'landmark' });
+            importedAccountIds.add(accountId);
+        }
+
+        if (!category) {
+            categories.push({
+                id: categoryId,
+                name: categoryId,
+                icon: 'tag',
+                type: transactionType,
+            });
         }
 
         const amount = Number(row[5]);
@@ -75,16 +107,27 @@ export function importTransactionsCsv(csv: string): Transaction[] {
             throw new Error('The selected CSV contains an invalid amount.');
         }
 
-        return {
+        const transaction = {
             id: row[0],
             date: row[1],
             accountId: row[2],
-            type: row[3] as TransactionType,
+            type: transactionType,
             categoryId: row[4],
             amount,
             notes: row[6],
             createdAt: row[7],
             updatedAt: row[8],
         };
+        transactionIds.add(transaction.id);
+        importedTransactions.push(transaction);
     });
+
+    // save updated
+    saveFinanceData({
+        transactions: [...transactions, ...importedTransactions],
+        accounts,
+        categories,
+        preferences,
+    });
+    return true;
 }
