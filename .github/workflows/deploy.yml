@@ -28,7 +28,7 @@ jobs:
 
       # 3. BUILD: Run your build command
       - name: Build Project
-        run: npm run build
+        run: npm run build -- --public-url ./
 
       # 4. DEPLOY: Push the build output to the gh-pages branch
       - name: Deploy to GitHub Pages
