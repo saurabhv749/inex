@@ -46,8 +46,7 @@ function OptionsManager({ section, records, recordError, addHandler, addRecordHa
                 ) : groupedRecords.map((record) => (
                     <div className="manage-row" key={record.id}>
                         <span className={"record-icon " + (isCategories ? (record as Category).type : "")}>
-                            {record.icon === 'wallet' ? 'W' : record.icon === 'tag' ? '#' : record.icon.charAt(0).toUpperCase()
-                            }
+                            {record.name.charAt(0).toUpperCase()}
                         </span>
                         <strong>{record.name}</strong>
                         <span className="row-spacer" />
