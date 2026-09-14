@@ -11,6 +11,7 @@ import Transactions from './components/Transactions';
 import OptionsManager from './components/OptionsManager';
 import SearchBar from './components/SearchBar';
 import { downloadJsonFile, downloadTransactionsCsv, selectImportFile, uploadJsonFile, uploadTransactionsCsv } from './utils/file';
+import { currencyDecimalPlaces } from './utils/currency';
 
 type View = 'Overview' | 'Transactions' | 'Accounts' | 'Categories';
 type Modal = 'transaction' | 'account' | 'category' | 'preferences' | null;
@@ -41,7 +42,8 @@ export function App() {
     useEffect(() => saveFinanceData(data), [data]);
 
     const currency = data.preferences.currencySign;
-    const formatAmount = (amount: number): string => `${currency}${amount.toFixed(2)}`
+    const decimalPlaces = currencyDecimalPlaces[currency]
+    const formatAmount = (amount: number): string => `${currency}${amount.toFixed(decimalPlaces as number)}`
     const currentDate = new Date();
     const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     const currentMonthTransactions = data.transactions.filter((item) => item.date.slice(0, 7) === currentMonthKey);

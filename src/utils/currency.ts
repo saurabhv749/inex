@@ -31,7 +31,7 @@ const CURRENCIES: Currency[] = [
         code: "CAD", name: "Canadian Dollar", symbol: "C$", decimal_digits: 2,
     },
     {
-        code: "CNY", name: "Chinese Yuan", symbol: "¥", decimal_digits: 2,
+        code: "CNY", name: "Chinese Yuan", symbol: "CN¥", decimal_digits: 2,
     },
     {
         code: "MXN", name: "Mexican Peso", symbol: "$", decimal_digits: 2,
@@ -99,15 +99,16 @@ const CURRENCIES: Currency[] = [
 ]
 
 interface CurrencyMapping {
-    [key: string]: string
+    [key: string]: string | number;
 }
 const defaultCurrencies: CurrencyMapping = {}
+const currencyDecimalPlaces: CurrencyMapping = {}
 
 for (let i = 0; i < CURRENCIES.length; i++) {
     const currency = CURRENCIES[i]
     const key = `${currency.name} (${currency.code})`
-    const value = currency.symbol
-    defaultCurrencies[key] = value
+    defaultCurrencies[key] = currency.symbol
+    currencyDecimalPlaces[currency.symbol] = currency.decimal_digits
 }
 
-export { defaultCurrencies }
+export { defaultCurrencies, currencyDecimalPlaces }
