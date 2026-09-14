@@ -20,7 +20,7 @@ function TransactionList({ transactions, accountName, categoryName, onEdit, onDe
                 <strong>{categoryName(transaction.categoryId)}</strong>
                 <small>{accountName(transaction.accountId)} · {formatDate(transaction.date)}{transaction.notes ? ` · ${transaction.notes}` : ''}</small>
             </span>
-            <strong className={transaction.type === 'income' ? 'amount income-text' : 'amount'}>
+            <strong className={transaction.type === 'income' ? 'amount income-text' : 'amount expense-text'}>
                 {transaction.type === 'income' ? '+' : '-'}
                 {formatAmount(transaction.amount)}
             </strong>

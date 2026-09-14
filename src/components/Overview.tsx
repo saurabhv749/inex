@@ -32,7 +32,7 @@ function Overview({
     const expenseIncomeRatio = (totalExpenses / totalIncome).toFixed(2)
     const currentDate = new Date();
     const dailyAvgExpense = (totalExpenses / currentDate.getDate())
-    const month = new Intl.DateTimeFormat('en', { month: "long", year: '2-digit' }).format()
+    const month = new Intl.DateTimeFormat('en', { month: "long", year: 'numeric' }).format()
 
     const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     const monthTransactions = transactions.filter((item) => item.date.slice(0, 7) === monthKey);
@@ -98,13 +98,11 @@ function Overview({
             </section>
             {/* current + previous month transactions */}
             <DailySpendingComparison formatAmount={formatAmount} transactions={transactions} />
-            <section className="insight-panel export-import">
-                <div className="">
-                    <p className="row-spacer">Download or upload app data in `json` format.</p>
-                    <div>
-                        <button type="button" className="button button-primary" onClick={exportJSON}>Export data</button>
-                        <button type="button" className="button button-secondary" onClick={importJSON}>Import data</button>
-                    </div>
+            <section className="export-import">
+                <span className="row-spacer">Download or upload app data in `json` format.</span>
+                <div>
+                    <button type="button" className="button button-primary" onClick={exportJSON}>Export data</button>
+                    <button type="button" className="button button-secondary" onClick={importJSON}>Import data</button>
                 </div>
             </section>
         </div>
