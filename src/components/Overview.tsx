@@ -29,7 +29,7 @@ function Overview({
     importJSON,
     formatAmount
 }: OverviewProps) {
-    const expenseIncomeRatio = (totalExpenses / totalIncome).toFixed(2)
+    const expenseIncomeRatio = totalIncome > 0 ? (totalExpenses / totalIncome).toFixed(2) : "Undefined"
     const currentDate = new Date();
     const dailyAvgExpense = (totalExpenses / currentDate.getDate())
     const month = new Intl.DateTimeFormat('en', { month: "long", year: 'numeric' }).format()

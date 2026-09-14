@@ -1,4 +1,5 @@
-import { defaultFinanceData, FinanceData } from '../models';
+import { FinanceData } from '../models';
+import { defaultFinanceData } from '../constants';
 
 const STORAGE_KEY = 'finance-tracker:data:v1';
 

@@ -14,11 +14,20 @@ function RecordModal({ title, label, onClose, onSubmit, isCategory }: RecordModa
     const [icon, setIcon] = useState('');
     const [categoryType, setCategoryType] = useState('expense');
 
+    const handleValueChange = (nameInput: string) => {
+        setName(nameInput)
+        setIcon(nameInput.charAt(0).toUpperCase())
+    }
+
     return (
         <ModalShell title={title} onClose={onClose}>
             <form
                 className="form-grid"
-                onSubmit={(event) => { event.preventDefault(); onSubmit(name, icon, categoryType); }}>
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    onSubmit(name, icon, categoryType);
+                }}
+            >
                 {isCategory && <select name="type"
                     defaultValue={categoryType} className="wide-field"
                     onChange={e => setCategoryType(e.target.value)}
@@ -31,13 +40,7 @@ function RecordModal({ title, label, onClose, onSubmit, isCategory }: RecordModa
                     <input
                         autoFocus required
                         value={name}
-                        onChange={(event) => setName(event.target.value)} />
-                </label>
-                <label className="wide-field">Icon name
-                    <input
-                        placeholder="wallet, food, home..."
-                        value={icon}
-                        onChange={(event) => setIcon(event.target.value)} />
+                        onChange={(event) => handleValueChange(event.target.value)} />
                 </label>
                 <div className="modal-actions wide-field">
                     <button
