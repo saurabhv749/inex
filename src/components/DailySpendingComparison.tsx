@@ -14,7 +14,7 @@ interface MonthSeries {
 
 const chartWidth = 760;
 const chartHeight = 250;
-const padding = { top: 20, right: 18, bottom: 34, left: 42 };
+const padding = { top: 16, right: 16, bottom: 24, left: 80 };
 const plotWidth = chartWidth - padding.left - padding.right;
 const plotHeight = chartHeight - padding.top - padding.bottom;
 

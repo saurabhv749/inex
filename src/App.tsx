@@ -232,9 +232,9 @@ export function App() {
 
         return <Transactions
             transactionListItems={renderTransactionList(filteredTransactions)}
-            addTransactionHandler={() => openTransaction()}
             exportCsv={exportCsv}
             importCsv={importCsv}
+            formatAmount={formatAmount}
             searchQuery={searchQuery}
             typeFilter={typeFilter}
             accountFilter={accountFilter}

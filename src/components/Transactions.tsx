@@ -7,7 +7,6 @@ interface FilterOption {
 }
 
 interface TransactionsProps {
-    addTransactionHandler: () => void;
     transactionListItems: ReactNode;
     searchQuery: string;
     typeFilter: string;
@@ -28,10 +27,10 @@ interface TransactionsProps {
     onClearFilters: () => void;
     exportCsv: () => void;
     importCsv: () => void;
+    formatAmount: (amount: number) => string;
 }
 
 function Transactions({
-    addTransactionHandler,
     transactionListItems,
     searchQuery,
     typeFilter,
@@ -52,8 +51,8 @@ function Transactions({
     onClearFilters,
     exportCsv,
     importCsv,
+    formatAmount
 }: TransactionsProps) {
-    const hasFilters = Boolean(searchQuery || typeFilter || accountFilter || categoryFilter);
     const formattedFromDate = fromDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${fromDate}T00:00:00`)) : 'Any date';
     const formattedToDate = toDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${toDate}T00:00:00`)) : 'Any date';
 
@@ -113,26 +112,25 @@ function Transactions({
             </section>
             <section >
                 <div className="transactions-summary" >
-                    <strong className='amount'>
-                        Total income: {totalIncome.toFixed(1)}
-                    </strong>
-                    <strong className='amount'>
-                        Total expense: {totalExpense.toFixed(1)}
-                    </strong>
-                    <strong className='amount'>
-                        Net total: {(totalIncome - totalExpense).toFixed(1)}
-                    </strong>
+                    <span className='amount'>
+                        Total income: <strong className="income-text">{formatAmount(totalIncome)}</strong>
+                    </span>
+                    <span className='amount'>
+                        | Total expense: <strong className="expense-text">{formatAmount(totalExpense)}</strong>
+                    </span>
+                    <span className='amount'>
+                        | Net total: <strong className="income-text">{formatAmount(totalIncome - totalExpense)}</strong>
+                    </span>
                 </div>
 
             </section>
-            <section >
-                <div className="transactions-summary import-export" >
-                    <span className="row-spacer">Download or upload transactions in csv format.</span>
+            <section className="export-import">
+                <span className="row-spacer">Download or upload transactions in csv format.</span>
+                <div>
                     <button type="button" className="button button-primary" onClick={exportCsv}>Export</button>
                     <button type="button" className="button button-secondary" onClick={importCsv}>Import</button>
                 </div>
             </section>
-
         </>)
 }
 
