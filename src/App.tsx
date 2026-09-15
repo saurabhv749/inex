@@ -43,7 +43,10 @@ export function App() {
 
     const currency = data.preferences.currencySign;
     const decimalPlaces = currencyDecimalPlaces[currency]
-    const formatAmount = (amount: number): string => `${currency}${amount.toFixed(decimalPlaces as number)}`
+    const formatAmount = (amount: number): string => {
+        const formattedValue = Math.abs(amount).toFixed(decimalPlaces as number)
+        return amount < 0 ? `-${currency}${formattedValue}` : `${currency}${formattedValue}`
+    };
     const currentDate = new Date();
     const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     const currentMonthTransactions = data.transactions.filter((item) => item.date.slice(0, 7) === currentMonthKey);

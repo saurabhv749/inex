@@ -55,6 +55,7 @@ function Transactions({
 }: TransactionsProps) {
     const formattedFromDate = fromDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${fromDate}T00:00:00`)) : 'Any date';
     const formattedToDate = toDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${toDate}T00:00:00`)) : 'Any date';
+    const netAmount = totalIncome - totalExpense
 
     return (
         <>
@@ -119,7 +120,7 @@ function Transactions({
                         | Total expense: <strong className="expense-text">{formatAmount(totalExpense)}</strong>
                     </span>
                     <span className='amount'>
-                        | Net total: <strong className="income-text">{formatAmount(totalIncome - totalExpense)}</strong>
+                        | Net total: <strong className={netAmount >= 0 ? "income-text" : "expense-text"}>{formatAmount(netAmount)}</strong>
                     </span>
                 </div>
 
