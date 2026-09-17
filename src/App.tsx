@@ -22,7 +22,11 @@ const now = () => new Date().toISOString();
 const dateInputValue = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 function emptyTransaction(): Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'> {
-    return { date: new Date().toISOString().slice(0, 16), accountId: '', type: 'expense', categoryId: '', amount: 0, notes: '' };
+    const now = new Date();
+    const tzOffset = now.getTimezoneOffset() * 60000; // offset in milliseconds
+    const localDateTime: string = new Date(now.getTime() - tzOffset).toISOString().slice(0, 16);
+
+    return { date: localDateTime, accountId: '', type: 'expense', categoryId: '', amount: 0, notes: '' };
 }
 
 export function App() {
