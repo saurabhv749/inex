@@ -12,6 +12,7 @@ interface OverviewProps {
     viewAllHandler: () => void;
     transactionListItems: ReactNode;
     transactions: Transaction[];
+    currentMonthTransactions: Transaction[];
     categories: Category[];
     exportJSON: () => void;
     importJSON: () => void;
@@ -24,6 +25,7 @@ function Overview({
     viewAllHandler,
     transactionListItems,
     transactions,
+    currentMonthTransactions,
     categories,
     exportJSON,
     importJSON,
@@ -33,10 +35,6 @@ function Overview({
     const currentDate = new Date();
     const dailyAvgExpense = (totalExpenses / currentDate.getDate())
     const month = new Intl.DateTimeFormat('en', { month: "long", year: 'numeric' }).format()
-
-    const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-    const monthTransactions = transactions.filter((item) => item.date.slice(0, 7) === monthKey);
-
 
     return (
         <div className="content-grid">
@@ -85,7 +83,8 @@ function Overview({
                         <span className="period-label">{month}</span>
                     }
                 />
-                <MonthlyCashFlowChart formatAmount={formatAmount} transactions={monthTransactions} />
+                {/* current month transactions */}
+                <MonthlyCashFlowChart formatAmount={formatAmount} transactions={currentMonthTransactions} />
             </section>
 
             <section className="insight-panel donut-panel">
@@ -94,7 +93,8 @@ function Overview({
                         <span className="period-label">{month}</span>
                     }
                 />
-                <ExpenseDonutChart formatAmount={formatAmount} transactions={monthTransactions} categories={categories} />
+                {/* current month transactions */}
+                <ExpenseDonutChart formatAmount={formatAmount} transactions={currentMonthTransactions} categories={categories} />
             </section>
             {/* current + previous month transactions */}
             <DailySpendingComparison formatAmount={formatAmount} transactions={transactions} />

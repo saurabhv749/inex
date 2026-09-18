@@ -1,6 +1,7 @@
 import { ChangeEvent, SubmitEvent, useState } from "react";
 import { TransactionType, Transaction, Account, Category } from "../models";
 import ModalShell from "./ModalShell";
+import { useModal } from "../context/ModalContext";
 
 
 interface TransactionModalProps {
@@ -8,17 +9,17 @@ interface TransactionModalProps {
     setDraft: (draft: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => void;
     accounts: Account[];
     categories: Category[];
-    error: string;
     editing: boolean;
-    onClose: () => void;
     onSubmit: (event: SubmitEvent<HTMLFormElement>) => void
 }
 
 function TransactionModal({
-    draft, setDraft, accounts, categories, error, editing, onClose, onSubmit }: TransactionModalProps
+    draft, setDraft, accounts, categories, editing, onSubmit }: TransactionModalProps
 ) {
+    const { recordError, closeModal, } = useModal()
+    const recordType = editing ? draft.type : "expense"
     const [validCategories, setValidCategories] = useState(
-        categories.filter(c => c.type == "expense")
+        categories.filter(c => c.type == recordType)
     )
 
     const typeChangeHandler = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -29,10 +30,15 @@ function TransactionModal({
         )
     }
 
+    const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+        onSubmit(e);
+        closeModal()
+    }
+
     return <ModalShell
         title={editing ? 'Edit transaction' : 'Add transaction'}
-        onClose={onClose}>
-        <form className="form-grid" onSubmit={onSubmit}>
+        onClose={closeModal}>
+        <form className="form-grid" onSubmit={handleSubmit}>
             <label>Date and time
                 <input required type="datetime-local" value={draft.date}
                     onChange={(event) => setDraft({ ...draft, date: event.target.value })} />
@@ -69,10 +75,10 @@ function TransactionModal({
                 <textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} placeholder="Optional context, such as lending or repayment" />
             </label>
             {/* error */}
-            {error && <p className="form-error wide-field">{error}</p>}
+            {recordError && <p className="form-error wide-field">{recordError}</p>}
 
             <div className="modal-actions wide-field">
-                <button className="button button-secondary" onClick={onClose} type="button">Cancel</button>
+                <button className="button button-secondary" onClick={closeModal} type="button">Cancel</button>
                 <button className="button button-primary" type="submit">{editing ? 'Save changes' : 'Add transaction'}</button>
             </div>
         </form>

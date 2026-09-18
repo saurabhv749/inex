@@ -1,15 +1,16 @@
 import { useState } from "react";
 import ModalShell from "./ModalShell";
+import { useModal } from "../context/ModalContext";
 
 interface RecordModalProps {
     title: string;
     label: string;
     isCategory: boolean;
-    onClose: () => void;
     onSubmit: (name: string, icon: string, type: string) => void;
 }
 
-function RecordModal({ title, label, onClose, onSubmit, isCategory }: RecordModalProps) {
+function RecordModal({ title, label, onSubmit, isCategory }: RecordModalProps) {
+    const { closeModal } = useModal()
     const [name, setName] = useState('');
     const [icon, setIcon] = useState('');
     const [categoryType, setCategoryType] = useState('expense');
@@ -20,12 +21,13 @@ function RecordModal({ title, label, onClose, onSubmit, isCategory }: RecordModa
     }
 
     return (
-        <ModalShell title={title} onClose={onClose}>
+        <ModalShell title={title} onClose={closeModal}>
             <form
                 className="form-grid"
                 onSubmit={(event) => {
                     event.preventDefault();
                     onSubmit(name, icon, categoryType);
+                    closeModal()
                 }}
             >
                 {isCategory && <select name="type"
@@ -45,7 +47,7 @@ function RecordModal({ title, label, onClose, onSubmit, isCategory }: RecordModa
                 <div className="modal-actions wide-field">
                     <button
                         className="button button-secondary"
-                        onClick={onClose} type="button">
+                        onClick={closeModal} type="button">
                         Cancel
                     </button>
                     <button

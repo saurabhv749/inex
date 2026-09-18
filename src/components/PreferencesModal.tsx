@@ -2,22 +2,24 @@ import { useState } from 'react';
 import { Preferences } from '../models';
 import { defaultCurrencies } from '../utils/currency';
 import ModalShell from './ModalShell';
+import { useModal } from '../context/ModalContext';
 
 interface PreferencesModalProps {
     preferences: Preferences;
-    onClose: () => void;
     onSave: (preferences: Preferences) => void;
 }
 
-function PreferencesModal({ preferences, onClose, onSave }: PreferencesModalProps) {
+function PreferencesModal({ preferences, onSave }: PreferencesModalProps) {
+    const { closeModal } = useModal()
     const [draft, setDraft] = useState(preferences);
 
     return (
-        <ModalShell title="Preferences" onClose={onClose}>
+        <ModalShell title="Preferences" onClose={closeModal}>
             <form className="form-grid preferences-form"
                 onSubmit={(event) => {
                     event.preventDefault();
                     onSave(draft);
+                    closeModal()
                 }}>
                 <label className="wide-field">
                     Currency
@@ -43,7 +45,7 @@ function PreferencesModal({ preferences, onClose, onSave }: PreferencesModalProp
                 </label>
 
                 <div className="modal-actions wide-field">
-                    <button className="button button-secondary" onClick={onClose} type="button">Cancel</button>
+                    <button className="button button-secondary" onClick={closeModal} type="button">Cancel</button>
                     <button className="button button-primary" type="submit">Save</button>
                 </div>
             </form>

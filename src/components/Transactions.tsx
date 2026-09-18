@@ -8,7 +8,6 @@ interface FilterOption {
 
 interface TransactionsProps {
     transactionListItems: ReactNode;
-    searchQuery: string;
     typeFilter: string;
     accountFilter: string;
     categoryFilter: string;
@@ -32,7 +31,6 @@ interface TransactionsProps {
 
 function Transactions({
     transactionListItems,
-    searchQuery,
     typeFilter,
     accountFilter,
     categoryFilter,

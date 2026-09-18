@@ -1,3 +1,7 @@
+export type View = 'Overview' | 'Transactions' | 'Accounts' | 'Categories';
+export type Modal = 'transaction' | 'account' | 'category' | 'preferences' | null;
+export type OptionsType = 'accounts' | 'categories';
+export type OptionTitleType = 'Accounts' | 'Categories';
 export type TransactionType = 'income' | 'expense';
 
 export interface Transaction {
