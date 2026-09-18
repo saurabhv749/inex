@@ -1,20 +1,19 @@
+import { useModal } from "../context/ModalContext";
 import { Account, Category } from "../models";
 import SectionHeading from "./SectionHeading";
 
 interface OptionsManagerProps {
     section: string;
+    isCategories: boolean;
     records: Account[] | Category[];
-    addHandler: () => void;
-    addRecordHandler: () => void;
     removeRecordHandler: (record: Account | Category) => void;
-    recordError: string
 }
 
-function OptionsManager({ section, records, recordError, addHandler, addRecordHandler, removeRecordHandler }: OptionsManagerProps) {
+function OptionsManager({ section, records, isCategories, removeRecordHandler }: OptionsManagerProps) {
+    const { recordError, setRecordError, setModal } = useModal()
     const types = ["expense", "income"]
     let groupedRecords: (Account | Category)[] = []
 
-    const isCategories = section.toLowerCase() === "categories"
     if (isCategories) {
         types.forEach(categoryType => {
             (records as Category[]).forEach(record => { if (record.type === categoryType) groupedRecords.push(record) })
@@ -23,6 +22,11 @@ function OptionsManager({ section, records, recordError, addHandler, addRecordHa
     else
         groupedRecords = records as Account[]
 
+    const addHandler = () => {
+        setRecordError('');
+        setModal(isCategories ? 'category' : 'account');
+    }
+    const addRecordHandler = () => setModal(isCategories ? 'category' : 'account')
 
     return (
         <section className="page-panel">
