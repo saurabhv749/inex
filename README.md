@@ -7,6 +7,19 @@
 
 The project is designed for people who want a simple view of their financial activity without the overhead of a large finance platform. It provides a focused workspace for recording transactions, reviewing spending patterns, managing accounts and categories, and adjusting personal preferences.
 
+## Features
+
+- **📱 Progressive Web App (PWA):** Fully installable on mobile and desktop devices (via browser menu options like "Install PWA") for a native app-like experience.
+- **⚡ Offline-First Support:** Powered by custom service workers and runtime caching, allowing the app to run seamlessly without an internet connection, backed by local storage.
+- 📊 Overview dashboard for income, expenses, balance, and spending activity.
+- 📝 Transaction creation, filtering, searching, editing, and deletion.
+- 💳 Account management.
+- 🏷️ Income and expense category management.
+- 📉 Spending comparison and category breakdown views.
+- 📥 Import and export of application data.
+- ⚙️ Currency and theme preferences.
+- 💻 Responsive layout for desktop and smaller screens.
+
 ## Why This Matters
 
 Financial clarity is easier to maintain when recording an expense takes very little effort and the resulting information is easy to understand. A small, focused tracker can help users:
@@ -18,17 +31,6 @@ Financial clarity is easier to maintain when recording an expense takes very lit
 - Make decisions from their own data rather than relying on memory.
 
 [InEx](https://saurabhv749.github.io/inex/) aims to make that daily workflow approachable, readable, and practical.
-
-## Features
-
-- Overview dashboard for income, expenses, balance, and spending activity.
-- Transaction creation, filtering, searching, editing, and deletion.
-- Account management.
-- Income and expense category management.
-- Spending comparison and category breakdown views.
-- Import and export of application data.
-- Currency and theme preferences.
-- Responsive layout for desktop and smaller screens.
 
 ## Technology
 
