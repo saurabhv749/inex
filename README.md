@@ -5,10 +5,18 @@
 
 ![screenshot](./assets/inex-finance-tracker.png)
 
+<details>
+   <summary>Click here to reveal code agent's memory</summary>
+
+![agent memory](./assets/agent-memory.png)
+</details>
+
+---
 The project is designed for people who want a simple view of their financial activity without the overhead of a large finance platform. It provides a focused workspace for recording transactions, reviewing spending patterns, managing accounts and categories, and adjusting personal preferences.
 
 ## Features
 
+- **🤖 Client-Side Code Agent:** Interactive AI chat assistant for personal finance insights. Features a secure local JavaScript environment for calculations, sending only execution observations to the Gemini model with Bring-Your-Own-Key (BYOK) support for complete data privacy.
 - **📱 Progressive Web App (PWA):** Fully installable on mobile and desktop devices (via browser menu options like "Install PWA") for a native app-like experience.
 - **⚡ Offline-First Support:** Powered by custom service workers and runtime caching, allowing the app to run seamlessly without an internet connection, backed by local storage.
 - 📊 Overview dashboard for income, expenses, balance, and spending activity.

@@ -12,6 +12,7 @@ interface PreferencesModalProps {
 function PreferencesModal({ preferences, onSave }: PreferencesModalProps) {
     const { closeModal } = useModal()
     const [draft, setDraft] = useState(preferences);
+    const [apiKey, setApiKey] = useState('')
 
     return (
         <ModalShell title="Preferences" onClose={closeModal}>
@@ -20,6 +21,10 @@ function PreferencesModal({ preferences, onSave }: PreferencesModalProps) {
                     event.preventDefault();
                     onSave(draft);
                     closeModal()
+                    if (apiKey.length) {
+                        localStorage.setItem('GEMINI_API_KEY', apiKey)
+                        alert('✅ GEMINI API Key updated.')
+                    }
                 }}>
                 <label className="wide-field">
                     Currency
@@ -41,6 +46,16 @@ function PreferencesModal({ preferences, onSave }: PreferencesModalProps) {
                         checked={draft.theme === 'dark'}
                         onChange={(event) => setDraft({ ...draft, theme: event.target.checked ? 'dark' : 'light' })}
                         type="checkbox"
+                    />
+                </label>
+
+                <label className="wide-field">GEMINI API key
+                    <input
+                        name='gemini api key'
+                        value={apiKey}
+                        onChange={e => setApiKey(e.target.value)}
+                        placeholder='Paste your Google AI studio API key here to update....'
+                        autoComplete='off'
                     />
                 </label>
 
