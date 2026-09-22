@@ -120,8 +120,10 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
                             placeholder="Write a message..."
                             autoComplete='off'
                         />
-                        <button className='button button-primary' type="submit" disabled={isRunning}>Send</button>
-                        <button type="reset" className='button text-button gemini-new-conversation' disabled={isRunning}>Clear</button>
+                        <div className="action-buttons">
+                            <button className='button button-primary' type="submit" disabled={isRunning}>Send</button>
+                            <button type="reset" className='button text-button gemini-new-conversation' disabled={isRunning}>Clear</button>
+                        </div>
                     </div>
                 </form>
             </div>

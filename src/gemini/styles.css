@@ -79,6 +79,7 @@
 }
 
 .gemini-composer {
+    background: var(--surface);
     padding: var(--p-2);
     border-top: 1px solid var(--border-color);
     position: sticky;
@@ -100,6 +101,14 @@
 .gemini-composer-row {
     display: flex;
     gap: var(--size-2);
+}
+
+.gemini-composer-row .action-buttons {
+    display: flex;
+
+    button {
+        flex: 1;
+    }
 }
 
 .gemini-composer input {
@@ -137,7 +146,12 @@
 
 @media (max-width: 640px) {
     .gemini-chat {
-        min-height: 22rem;
+        min-height: 80vh;
+    }
+
+    .query-chip {
+        font-size: var(--font-size-2);
+        max-width: 100%;
     }
 
     .gemini-composer-row {
