@@ -43,12 +43,12 @@ Here are the TypeScript interfaces for FinanceData:
 ${et}
 ---
 
-The user will ask a question about their financial data. 
-Your job is to output ONLY a valid, executable JavaScript code snippet that uses FinanceData to calculated answer.
+The user will ask a question about their financial data.
+Your job is to output ONLY a valid, executable JavaScript code snippet that uses FinanceData to calculate answer.
 
 Put your js code in between "<code>" and "</code>" tags. Do NOT include markdown formatting blocks (like \`\`\`javascript), explanations, or conversational text. Just output the raw code string between the tags.
 
-Read the observations to decide if you are now able to answer user query.
+Review the observations determine whether you are now able to answer the user's query.
 To answer a query wrap your answer in natural language between ${ee[0]} and ${ee[1]} tags.
 
 Whatever you return from your code block will be available to you as an observation, just make sure to not to return very large data, array or objects. You can also use console.log, console.error functions for debugging purpose.
@@ -75,13 +75,13 @@ RULES:
 - Do not rush to answer user query in one go, if you need to inspect something before going further with calculations use debugging, the observations will be available for you.
 - You can see previous observations but can't access variables assigned in last code execution.
 - Use \`console.log()\` to print output, variables, or inspect data.
-- When you have completed the task or computed the final result, provide your final response in clear text WITHOUT any code blocks within ${ee[0]} and ${ee[1]} tags.
-- Your response must have either a js code block(within <code> and </code>) or final answer within ${ee[0]} and ${ee[1]} tags, but NEVER both.
+- When you have completed the task or computed the final result, provide your final response in plain text WITHOUT any code blocks, enclosed by the ${ee[0]} and ${ee[1]} tags.
+- Your response must have either a js code block(within <code> and </code>) or final answer enclosed by the ${ee[0]} and ${ee[1]} tags, but NEVER both.
 - Never try to write 'observation' as that will be provided to you after evaluation of your javascript snippet.
-- Do not respond with both code and answer.
-- Your final answer should provide a short summary of how you came to the conclusion including but not limited to the calculations, for trustworthiness, accuracy and verifiability.
+- NEVER respond with both code and answer.
+- Your final answer should provide a short summary of how you reached the conclusion-including important calculations- to ensure trustworthiness, accuracy, and verifiability.
 
-You'll be rewarded $499,999 for completing each task successfully. 
+You will be rewarded $499,999 for successfully completing each task. 
 `,er=e=>{let t=e.match(/<code>([\s\S]*?)<\/code>/i);return t?t[1]:null};function ea(e){let t=e.match(/<answer>([\s\S]*?)<\/answer>/i);return t&&t[1]?t[1].trim():e.trim()}let el=e=>{let t=e.toLowerCase();return[...Array.isArray(ee)?ee.filter(e=>"string"==typeof e&&!!e.trim()):"string"==typeof ee&&ee.trim()?[ee]:[],"final answer","final_answer","<final>","</final>","<answer>","</answer>"].some(e=>t.includes(e.toLowerCase()))};function eo(e){if("string"==typeof e)return e;if(null==e)return String(e);if(e instanceof Error)return e.stack||`${e.name}: ${e.message}`;try{return JSON.stringify(e,null,2)}catch{return Object.prototype.toString.call(e)}}class ei{messages=[];add(e,t){this.messages.push({role:e,content:String(t)})}toMessages(){return this.messages.filter((e,t)=>"code"!==e.role&&"observation"!==e.role||"observation"===e.role&&t===this.messages.length-1).map((e,t)=>"observation"===e.role?{role:"user",content:e.content}:e)}print(){this.messages.forEach(e=>{"system"!==e.role&&"assistant"!==e.role&&(({content:e,role:t})=>{let{badge:n,text:r}={user:{badge:"background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-weight: bold;",text:"color: #0056b3;"},code:{badge:"background: #6f42c1; color: white; padding: 2px 6px; border-radius: 3px; font-weight: bold;",text:"color: #5a32a3;"},observation:{badge:"background: #fd7e14; color: white; padding: 2px 6px; border-radius: 3px; font-weight: bold;",text:"color: #d96500;"},answer:{badge:"background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-weight: bold;",text:"color: #1e7e34;"}}[t],a=t.toUpperCase();console.log(`%c ${a} %c 
 ${e}`,n,r)})(e)})}clearMessages(){this.messages=[]}}var es=class{memory;constructor(){this.memory=new ei}reset(){this.memory.clearMessages()}showMemory(){this.memory.print()}async run(e,t){if(!t)return"No financeData provided to the agent.";this.reset(),this.memory.add("system",en),this.memory.add("user",e);let n=null;for(let e=0;e<10;e+=1){let r=this.memory.toMessages(),a=await Z(r);this.memory.add("assistant",a);let l=er(a);if(l){this.memory.add("code",`[Code Snippet]:
 ${l}`);let e=function(e,t){let n=t.replace(/```(?:javascript|js|typescript|ts)?/gi,"").replace(/```/g,"").trim();if(!(n=n.replace(/[\u00A0\u1680\u180E\u2000-\u200B\u202F\u205F\u3000\uFEFF]/g," ").trim()).length)return null;let r=[];try{let t=new(Object.getPrototypeOf(function(){})).constructor("console","financeData",n)({log:(...e)=>r.push(e.map(e=>eo(e)).join(" ")),error:(...e)=>r.push("[ERROR] "+e.map(e=>eo(e)).join(" ")),warn:(...e)=>r.push("[WARN] "+e.map(e=>eo(e)).join(" ")),info:(...e)=>r.push("[INFO] "+e.map(e=>eo(e)).join(" "))},e),a="Execution Logs:\n"+r.join("\n");if(void 0!==t){let e=`[Return Value]: ${eo(t)}`;a=a?`${a}
