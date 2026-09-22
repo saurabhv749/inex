@@ -103,11 +103,12 @@ The repository is organized around the application entry point, reusable interfa
 ```text
 src/
   components/    Reusable application views and interface components
-  utils/         Shared data, file, currency, and storage helpers
-  icons/         App icons
-  hooks/         Hooks for managing app state and transaction filters
   context/       Modal context used by app
+  gemini/        Basic code agent implementation powered by Gemini
+  hooks/         Hooks for managing app state and transaction filters
+  icons/         App icons
   pages/         Page views
+  utils/         Shared data, file, currency, and storage helpers
   App.tsx        Application composition
   models.ts      Shared data models
   constants.ts   Shared application constants
