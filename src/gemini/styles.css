@@ -118,6 +118,7 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-2);
     font: inherit;
+    background: transparent;
 }
 
 .gemini-composer input:focus {
@@ -142,6 +143,31 @@
 .privacy-notice {
     font-size: var(--font-size-1);
     text-align: center;
+}
+
+.theme-dark {
+    .gemini-chat {
+        --border-color: #394135;
+        --border-color-hover: #5b6954;
+        --hint-card-surface: #2a3731;
+        --message-color: #fff;
+    }
+
+    .query-chip {
+        color: var(--ink-3);
+    }
+
+    .gemini-message-user {
+        background: #636765;
+    }
+
+    .gemini-message-label {
+        color: var(--ink-3);
+    }
+
+    .gemini-message-assistant {
+        color: var(--ink-4);
+    }
 }
 
 @media (max-width: 640px) {
