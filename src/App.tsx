@@ -13,7 +13,8 @@ import SearchBar from './components/SearchBar';
 import OverviewPage from './pages/OverviewPage';
 import TransactionsPage from './pages/TransactionsPage';
 import OptionsManagerPage from './pages/OptionsManagerPage';
-import { SettingsIcon, AccountsIcon, CategoriesIcon, OverviewIcon, TransactionsIcon } from './icons';
+import { SettingsIcon, AccountsIcon, CategoriesIcon, OverviewIcon, TransactionsIcon, GeminiAIIcon } from './icons';
+import AskGemini from './gemini/AskGemini';
 
 // nav & icons
 interface navIconMapping {
@@ -50,6 +51,8 @@ export function App() {
     // map account/category to get name: account.id -> account.name
     const accountName = (id: string) => data.accounts.find((item) => item.id === id)?.name ?? 'Unassigned account';
     const categoryName = (id: string) => data.categories.find((item) => item.id === id)?.name ?? 'Uncategorized';
+    const allAccounts = data.accounts.map(a => a.name)
+    const allCategories = data.categories.map(c => c.name)
 
     function renderTransactionList(transactions: Transaction[]) {
         if (transactions.length === 0)
@@ -153,6 +156,14 @@ export function App() {
                     activeView === 'Overview' ? renderOverview() : activeView === 'Transactions' ? renderTransactions() : renderOptionsManager(activeView.toLowerCase() as OptionsType)
                 }
             </main>
+            {/* floating AI asssitant button */}
+            <button className="button button-primary button-floating"
+                type="button"
+                onClick={() => setModal('ai')}
+            > <span className="nav-icon"><GeminiAIIcon /> </span>Ask AI</button>
+            {
+                modal === 'ai' && <AskGemini data={data} currency={currency} accountNames={allAccounts} categoryNames={allCategories} />
+            }
             {
                 modal === 'transaction' && <TransactionModal
                     draft={transactionDraft}

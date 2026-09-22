@@ -300,6 +300,17 @@ button:focus-visible {
   color: var(--primary);
 }
 
+.button-floating {
+  position: fixed;
+  z-index: 10;
+  bottom: var(--size-8);
+  right: var(--size-8);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--size-1);
+}
+
 .content-grid {
   display: grid;
   gap: var(--size-4);
