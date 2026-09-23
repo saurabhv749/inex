@@ -1,6 +1,6 @@
 import { FinanceData } from "../models";
 import { chatCompletion } from "./llm";
-import { FINAL_ANSWER_TAGS, SYSTEM_PROMPT } from "./prompts";
+import { FINAL_ANSWER_TAGS, SYSTEM_PROMPT, ACTIONS_PROMPT } from "./prompts";
 
 // TYPES
 interface BaseMessage<TRole extends string> {
@@ -154,7 +154,7 @@ class AgentMemory {
     }
 
     toMessages(): Message[] {
-        const messages = this.messages.filter((m, i) => (m.role !== 'code' && m.role !== 'observation') || (m.role === 'observation' && i === this.messages.length - 1))
+        const messages = this.messages.filter((m, i) => (m.role !== 'code' && m.role !== 'answer' && m.role !== 'observation') || (m.role === 'observation' && i === this.messages.length - 1))
         // manage context:
         // add last observation as a user message, remove rest of the code snippets
         return messages.map((msg, index) => {
@@ -163,6 +163,22 @@ class AgentMemory {
             }
             return msg;
         });
+    }
+
+    async summarize() {
+        const msgs = this.messages.filter(m => (
+            m.role === 'user' || m.role === 'observation' || m.role === "answer")
+        )
+        const actionLogs = msgs.map(msg => {
+            return msg.role === 'user' ? `[User]:\n${msg.content}` : msg.content
+        })
+        const messages: Message[] = [
+            { role: 'system', content: ACTIONS_PROMPT },
+            { role: 'user', content: actionLogs.join('\n\n') }
+        ]
+
+        const summary = await chatCompletion(messages);
+        return summary
     }
 
     print() {
@@ -183,14 +199,21 @@ class CodeAgent {
 
     constructor() {
         this.memory = new AgentMemory();
+        this.memory.add('system', SYSTEM_PROMPT);
     }
 
     reset() {
         this.memory.clearMessages()
+        this.memory.add('system', SYSTEM_PROMPT);
     }
 
     showMemory() {
         this.memory.print()
+    }
+
+    async summarize() {
+        const stepsSummary = await this.memory.summarize()
+        return stepsSummary
     }
 
     async run(userQuery: string, financeData?: FinanceData): Promise<string> {
@@ -198,8 +221,6 @@ class CodeAgent {
         if (!data) {
             return 'No financeData provided to the agent.';
         }
-        this.reset();
-        this.memory.add('system', SYSTEM_PROMPT);
         this.memory.add('user', userQuery);
 
         const maxSteps = 10;
@@ -219,7 +240,7 @@ class CodeAgent {
                 this.memory.add('observation', `[Observation]:\n${observation}`);
 
                 if (looksLikeFinalAnswer(llmText)) {
-                    this.memory.add('answer', `[Final Answer]:\n${extractAnswer(observation)}`);
+                    this.memory.add('answer', `[Answer]:\n${extractAnswer(observation)}`);
                     return extractAnswer(observation);
                 }
 
@@ -227,7 +248,7 @@ class CodeAgent {
             }
 
             if (looksLikeFinalAnswer(llmText)) {
-                this.memory.add('answer', `[Final Answer]:\n${extractAnswer(llmText)}`);
+                this.memory.add('answer', `[Answer]:\n${extractAnswer(llmText)}`);
                 return extractAnswer(llmText);
             }
 

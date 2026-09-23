@@ -27,6 +27,8 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
     const [messages, setMessages] = useState<Message[]>([]);
     const [agent] = useState(() => new CodeAgent());
     const [isRunning, setIsRunning] = useState(false);
+    const [agentSteps, setAgentSteps] = useState('');
+    const [initialMessage, setInitialMessage] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const today = new Date().toLocaleDateString('en-Us', { day: '2-digit', month: 'long', year: 'numeric' })
@@ -53,15 +55,19 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
         setMessage('');
 
         try {
-            const prompt = `${userDataInfo}\n\n${trimmedMessage}`
+            let prompt = trimmedMessage
+            if (initialMessage) {
+                prompt = `${userDataInfo}\n\n${trimmedMessage}`
+                setInitialMessage(false)
+            }
             const assistantReply = await agent.run(prompt, data);
-            // agent.showMemory() // debug
-
             setMessages((currentMessages) => [
                 ...currentMessages,
                 { role: 'assistant', content: assistantReply },
             ]);
-
+            // agent.showMemory() // debug
+            const stepsSummary = await agent.summarize()
+            setAgentSteps(stepsSummary)
         } finally {
             setIsRunning(false);
         }
@@ -71,6 +77,8 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
         event.preventDefault();
         setMessages([]);
         setMessage('');
+        setAgentSteps('')
+        setInitialMessage(true)
         agent.reset()
     };
 
@@ -99,6 +107,9 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
                             </div>
                         ))
                     )}
+                    {
+                        (agentSteps && !isRunning) && <details> <summary>Show Steps </summary> {agentSteps}</details>
+                    }
                     {
                         isRunning && <div className='gemini-message'><p>Generating....</p></div>
                     }
