@@ -107,13 +107,13 @@ function executeUserQuery(financeData: FinanceData, codeString: string) {
         let output = "Execution Logs:\n" + logs.join('\n');
         if (result !== undefined) {
             // if codeblock has a return statement
-            const formattedResult = `[Return Value]: ${formatForLLM(result)}`;
+            const formattedResult = `[Return Value]:\n ${formatForLLM(result)}`;
             output = output ? `${output}\n${formattedResult}` : formattedResult;
         }
         return output.trim()
     } catch (err: any) {
         let output = logs.join('\n');
-        const errorMsg = `[Runtime Error]: ${err.name} - ${err.message} || ''}`;
+        const errorMsg = `[Runtime Error]:\n ${err.name} - ${err.message} || ''}`;
         return output ? `${output}\n\n${errorMsg}` : errorMsg
     }
 }

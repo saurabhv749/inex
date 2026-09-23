@@ -52,7 +52,8 @@ export function App() {
     const accountName = (id: string) => data.accounts.find((item) => item.id === id)?.name ?? 'Unassigned account';
     const categoryName = (id: string) => data.categories.find((item) => item.id === id)?.name ?? 'Uncategorized';
     const allAccounts = data.accounts.map(a => a.name)
-    const allCategories = data.categories.map(c => c.name)
+    const incomeCategories = data.categories.filter(c => c.type === 'income').map(c => c.name)
+    const expenseCategories = data.categories.filter(c => c.type === 'expense').map(c => c.name)
 
     function renderTransactionList(transactions: Transaction[]) {
         if (transactions.length === 0)
@@ -162,7 +163,7 @@ export function App() {
                 onClick={() => setModal('ai')}
             > <span className="nav-icon"><GeminiAIIcon /> </span>Ask AI</button>
             {
-                modal === 'ai' && <AskGemini data={data} currency={currency} accountNames={allAccounts} categoryNames={allCategories} />
+                modal === 'ai' && <AskGemini data={data} currency={currency} accountNames={allAccounts} incomeCategories={incomeCategories} expenseCategories={expenseCategories} />
             }
             {
                 modal === 'transaction' && <TransactionModal

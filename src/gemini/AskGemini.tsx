@@ -12,7 +12,8 @@ interface AskGeminiProps {
     data: FinanceData;
     currency: string;
     accountNames: string[];
-    categoryNames: string[];
+    incomeCategories: string[];
+    expenseCategories: string[];
 }
 
 const QueryHints = [
@@ -21,7 +22,7 @@ const QueryHints = [
     "How long does my primary salary or income source typically last before my account balance dips below a safety threshold?"
 ]
 
-function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiProps) {
+function AskGemini({ data, currency, accountNames, expenseCategories, incomeCategories }: AskGeminiProps) {
     const { closeModal } = useModal();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
@@ -32,7 +33,7 @@ function AskGemini({ data, currency, accountNames, categoryNames }: AskGeminiPro
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const today = new Date().toLocaleDateString('en-Us', { day: '2-digit', month: 'long', year: 'numeric' })
-    const userDataInfo = `Today is ${today}\nAvailable accounts: ${accountNames}\nAvailable categories: ${categoryNames}\nCurrency in use: ${currency}`
+    const userDataInfo = `Today is ${today}\nAvailable accounts: ${accountNames}\nIncome categories: ${incomeCategories}\nExpense categories: ${expenseCategories}\nCurrency in use: ${currency}`
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
