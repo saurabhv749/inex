@@ -10,11 +10,12 @@ import TransactionList from './components/TransactionList';
 import { PreferencesModal, RecordModal, TransactionModal } from './components/Modal'
 import EmptyState from './components/EmptyState';
 import SearchBar from './components/SearchBar';
+import SyncModal from './components/SyncModal';
 
 import OverviewPage from './pages/OverviewPage';
 import TransactionsPage from './pages/TransactionsPage';
 import OptionsManagerPage from './pages/OptionsManagerPage';
-import { SettingsIcon, AccountsIcon, CategoriesIcon, OverviewIcon, TransactionsIcon, GeminiAIIcon } from './icons';
+import { SettingsIcon, AccountsIcon, CategoriesIcon, OverviewIcon, TransactionsIcon, GeminiAIIcon, SyncIcon } from './icons';
 import AskGemini from './gemini/AskGemini';
 
 // nav & icons
@@ -124,6 +125,10 @@ export function App() {
                             </span>{item}
                         </button>)
                     }
+                    <button className="nav-item" onClick={() => setModal('sync')} type="button">
+                        <span className="nav-icon" aria-hidden="true"><SyncIcon /></span>
+                        <span>Sync</span>
+                    </button>
                     <button className="nav-item display-mobile" onClick={() => setModal('preferences')} type="button">
                         <span className="nav-icon" aria-hidden="true">*</span>
                         <span>Preferences</span>
@@ -166,6 +171,11 @@ export function App() {
             {
                 modal === 'ai' && <AskGemini data={data} currency={currency} accountNames={allAccounts} incomeCategories={incomeCategories} expenseCategories={expenseCategories} />
             }
+
+            {
+                modal === 'sync' && <SyncModal title='Data transfer' />
+            }
+
             {
                 modal === 'transaction' && <TransactionModal
                     draft={transactionDraft}
