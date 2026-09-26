@@ -27,6 +27,7 @@ The project is designed for people who want a simple view of their financial act
 - 📥 Import and export of application data.
 - ⚙️ Currency and theme preferences.
 - 💻 Responsive layout for desktop and smaller screens.
+- 🔁 Device sync on demand.
 
 ## Why This Matters
 

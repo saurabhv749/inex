@@ -8,11 +8,12 @@ export function AccountsIcon() {
 
 export function CategoriesIcon() {
     return <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none" /><path fill="currentColor" d="M6.5 11L12 2l5.5 9zm11 11q-1.875 0-3.187-1.312T13 17.5t1.313-3.187T17.5 13t3.188 1.313T22 17.5t-1.312 3.188T17.5 22M3 21.5v-8h8v8zM17.5 20q1.05 0 1.775-.725T20 17.5t-.725-1.775T17.5 15t-1.775.725T15 17.5t.725 1.775T17.5 20M5 19.5h4v-4H5zM10.05 9h3.9L12 5.85zm7.45 8.5" /></svg>
-
 }
+
 export function TransactionsIcon() {
     return <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none" /><path fill="currentColor" d="M6 22q-1.25 0-2.125-.875T3 19v-2q0-.425.288-.712T4 16h2V2.6q0-.175.15-.238t.275.063l.725.725q.15.15.35.15t.35-.15l.8-.8Q8.8 2.2 9 2.2t.35.15l.8.8q.15.15.35.15t.35-.15l.8-.8q.15-.15.35-.15t.35.15l.8.8q.15.15.35.15t.35-.15l.8-.8q.15-.15.35-.15t.35.15l.8.8q.15.15.35.15t.35-.15l.8-.8q.15-.15.35-.15t.35.15l.8.8q.15.15.35.15t.35-.15l.725-.725q.125-.125.275-.063T21 2.6V19q0 1.25-.875 2.125T18 22zm12-2q.425 0 .713-.288T19 19V5H8v11h8q.425 0 .713.288T17 17v2q0 .425.288.713T18 20M10 7h4q.425 0 .713.288T15 8t-.288.713T14 9h-4q-.425 0-.712-.288T9 8t.288-.712T10 7m0 3h4q.425 0 .713.288T15 11t-.288.713T14 12h-4q-.425 0-.712-.288T9 11t.288-.712T10 10m7-1q-.425 0-.712-.288T16 8t.288-.712T17 7t.713.288T18 8t-.288.713T17 9m0 3q-.425 0-.712-.288T16 11t.288-.712T17 10t.713.288T18 11t-.288.713T17 12M6 20h9v-2H5v1q0 .425.288.713T6 20m-1 0v-2z" /></svg>
 }
+
 export function OverviewIcon() {
     return <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none" /><path fill="currentColor" d="M3 19q-.825 0-1.412-.587T1 17V7q0-.825.588-1.412T3 5h10q.825 0 1.413.588T15 7v10q0 .825-.587 1.413T13 19zm0-2h10V7H3zm14.288 1.713Q17 18.425 17 18V6q0-.425.288-.712T18 5t.713.288T19 6v12q0 .425-.288.713T18 19t-.712-.288m4 0Q21 18.426 21 18V6q0-.425.288-.712T22 5t.713.288T23 6v12q0 .425-.288.713T22 19t-.712-.288M3 17V7z" /></svg>
 }
@@ -21,5 +22,12 @@ export function GeminiAIIcon() {
     return <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
         <path d="M0 0h24v24H0z" fill="none" />
         <path fill="currentColor" d="M2 22V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18H6zm3.15-6H20V4H4v13.125zM4 16V4z" />
+    </svg>
+}
+
+export function SyncIcon() {
+    return <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path fill="currentColor" d="m21.65 7.65l-2.79-2.79a.501.501 0 0 0-.86.35V7H4c-.55 0-1 .45-1 1s.45 1 1 1h14v1.79c0 .45.54.67.85.35l2.79-2.79c.2-.19.2-.51.01-.7M20 15H6v-1.79c0-.45-.54-.67-.85-.35l-2.79 2.79c-.2.19-.2.51-.01.7l2.79 2.79c.32.32.86.1.86-.35V17h14c.55 0 1-.45 1-1s-.45-1-1-1" />
     </svg>
 }
