@@ -4,6 +4,7 @@ import { OptionsType, Transaction, View } from './models';
 import { useModal } from './context/ModalContext';
 import { useFinanceData } from './hooks/useFinanceData';
 import { currencyDecimalPlaces } from './utils/currency';
+import { sortByDateDescending } from './utils/dates';
 
 import TransactionList from './components/TransactionList';
 import { PreferencesModal, RecordModal, TransactionModal } from './components/Modal'
@@ -60,7 +61,7 @@ export function App() {
             return <EmptyState onAdd={() => handleEditTransaction()} />
 
         // sort by date: newest first
-        transactions = [...transactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        transactions = sortByDateDescending(transactions);
 
         return <TransactionList
             transactions={transactions}

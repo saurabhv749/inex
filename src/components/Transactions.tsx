@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
 import SectionHeading from "./SectionHeading";
+import { formatFilterDate } from "../utils/dates";
 
 interface FilterOption {
     id: string;
     name: string;
+    type?: string;
 }
 
 interface TransactionsProps {
@@ -51,8 +53,8 @@ function Transactions({
     importCsv,
     formatAmount
 }: TransactionsProps) {
-    const formattedFromDate = fromDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${fromDate}T00:00:00`)) : 'Any date';
-    const formattedToDate = toDate ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(`${toDate}T00:00:00`)) : 'Any date';
+    const formattedFromDate = fromDate ? formatFilterDate(fromDate) : 'Any date';
+    const formattedToDate = toDate ? formatFilterDate(toDate) : 'Any date';
     const netAmount = totalIncome - totalExpense
 
     return (
@@ -93,7 +95,7 @@ function Transactions({
                             <span>Category</span>
                             <select value={categoryFilter} onChange={(event) => onCategoryFilterChange(event.target.value)}>
                                 <option value="">All categories</option>
-                                {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+                                {categories.map((category) => <option key={category.id} value={category.id}>{category.type === 'expense' ? '-' : '+'} {category.name}</option>)}
                             </select>
                         </label>
                     </div>

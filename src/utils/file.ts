@@ -1,6 +1,7 @@
 import { FinanceData } from '../models';
 import { exportTransactionsCsv, importTransactionsCsv } from './csv';
 import { exportFinanceData, importFinanceData } from './storage';
+import { getFilenameTimestamp } from './dates';
 
 const fileMimeTypes = {
     json: 'application/json;charset=utf-8',
@@ -63,7 +64,7 @@ export function downloadTextFile(
     URL.revokeObjectURL(url);
 }
 
-export function downloadJsonFile(data: FinanceData, filename = 'InEx-finance-tracker.json'): void {
+export function downloadJsonFile(data: FinanceData, filename = `InEx-finance-tracker-${getFilenameTimestamp()}.json`): void {
     downloadTextFile(exportFinanceData(data), filename, fileMimeTypes.json);
 }
 

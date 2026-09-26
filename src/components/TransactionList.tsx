@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Transaction } from "../models";
+import { formatTransactionDate } from "../utils/dates";
 
 interface TransactionListProps {
     transactions: Transaction[];
@@ -9,8 +10,6 @@ interface TransactionListProps {
     onDelete: (id: string) => void;
     formatAmount: (amount: number) => string;
 }
-
-const formatDate = (date: string) => new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(date));
 
 function TransactionList({ transactions, accountName, categoryName, onEdit, onDelete, formatAmount }: TransactionListProps) {
     const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -28,7 +27,7 @@ function TransactionList({ transactions, accountName, categoryName, onEdit, onDe
                             {transaction.type === 'income' ? '+' : '-'}</span>
                         <span className="transaction-main">
                             <strong>{categoryName(transaction.categoryId)}</strong>
-                            <small>{accountName(transaction.accountId)} · {formatDate(transaction.date)}{transaction.notes ? ` · ${transaction.notes}` : ''}</small>
+                            <small>{accountName(transaction.accountId)} · {formatTransactionDate(transaction.date)}{transaction.notes ? ` · ${transaction.notes}` : ''}</small>
                         </span>
                         <strong className={transaction.type === 'income' ? 'amount income-text' : 'amount expense-text'}>
                             {transaction.type === 'income' ? '+' : '-'}

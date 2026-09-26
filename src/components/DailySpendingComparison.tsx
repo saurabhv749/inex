@@ -1,4 +1,5 @@
 import { Transaction } from '../models';
+import { formatMonth, getCurrentDate, getDayOfMonth, getDaysInMonth, getPreviousMonthStart, isSameMonth } from '../utils/dates';
 
 interface DailySpendingComparisonProps {
     formatAmount: (amount: number) => string;
@@ -19,20 +20,16 @@ const plotWidth = chartWidth - padding.left - padding.right;
 const plotHeight = chartHeight - padding.top - padding.bottom;
 
 function getMonthSeries(transactions: Transaction[], date: Date, label: string): MonthSeries {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const days = new Date(year, month + 1, 0).getDate();
+    const days = getDaysInMonth(date);
     const values = Array.from({ length: days }, () => 0);
 
     transactions
         .filter((item) => {
-            const itemDate = new Date(item.date);
             return item.type === 'expense'
-                && itemDate.getFullYear() === year
-                && itemDate.getMonth() === month;
+                && isSameMonth(item.date, date);
         })
         .forEach((item) => {
-            const day = new Date(item.date).getDate() - 1;
+            const day = getDayOfMonth(item.date) - 1;
             values[day] += item.amount;
         });
 
@@ -40,17 +37,17 @@ function getMonthSeries(transactions: Transaction[], date: Date, label: string):
 }
 
 function DailySpendingComparison({ formatAmount, transactions }: DailySpendingComparisonProps) {
-    const currentDate = new Date();
-    const previousDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    const currentDate = getCurrentDate();
+    const previousDate = getPreviousMonthStart(currentDate);
     const currentMonth = getMonthSeries(
         transactions,
         currentDate,
-        new Intl.DateTimeFormat('en', { month: 'long' }).format(currentDate),
+        formatMonth(currentDate),
     );
     const previousMonth = getMonthSeries(
         transactions,
         previousDate,
-        new Intl.DateTimeFormat('en', { month: 'long' }).format(previousDate),
+        formatMonth(previousDate),
     );
     const visibleDays = Math.max(currentMonth.days, previousMonth.days);
     const maxValue = Math.max(...currentMonth.values, ...previousMonth.values, 1);

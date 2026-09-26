@@ -2,6 +2,7 @@ import Transactions from "../components/Transactions";
 import { useTransactionFilters } from "../hooks/useTransactionFilters";
 import { FinanceData, Transaction } from "../models";
 import { downloadTransactionsCsv, selectImportFile, uploadTransactionsCsv } from "../utils/file";
+import { formatDateForFilename } from "../utils/dates";
 
 interface TransactionsPageProps {
     data: FinanceData;
@@ -46,10 +47,10 @@ function TransactionsPage({ data, searchQuery, setSearchQuery, accountName, cate
         .reduce((sum, item) => sum + item.amount, 0);
 
     // Transaction Helpers
-    const currentDate = new Date();
-    const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     const exportCsv = () => {
-        downloadTransactionsCsv(filteredTransactions, `transactions-${currentMonthKey}.csv`);
+        const startDate = fromDate ? formatDateForFilename(fromDate) : 'any-date';
+        const endDate = toDate ? formatDateForFilename(toDate) : 'any-date';
+        downloadTransactionsCsv(filteredTransactions, `transactions-${startDate}-to-${endDate}.csv`);
     }
     const importCsv = async () => {
         const file = await selectImportFile('csv');

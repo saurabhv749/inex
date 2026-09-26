@@ -5,6 +5,7 @@ import MonthlyCashFlowChart from "./MonthlyCashFlowChart";
 import ExpenseDonutChart from "./ExpenseDonutChart";
 import DailySpendingComparison from "./DailySpendingComparison";
 import { Category, Transaction } from "../models";
+import { formatMonth, getCurrentDate } from "../utils/dates";
 
 interface OverviewProps {
     totalIncome: number;
@@ -32,9 +33,9 @@ function Overview({
     formatAmount
 }: OverviewProps) {
     const expenseIncomeRatio = totalIncome > 0 ? (totalExpenses / totalIncome).toFixed(2) : "Undefined"
-    const currentDate = new Date();
+    const currentDate = getCurrentDate();
     const dailyAvgExpense = (totalExpenses / currentDate.getDate())
-    const month = new Intl.DateTimeFormat('en', { month: "long", year: 'numeric' }).format()
+    const month = formatMonth(currentDate, true);
 
     return (
         <div className="content-grid">

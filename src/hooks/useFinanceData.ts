@@ -1,14 +1,13 @@
 import { useEffect, useState, SubmitEvent } from "react";
 import { Account, Category, FinanceData, Preferences, Transaction } from "../models";
 import { loadFinanceData, saveFinanceData } from "../utils/storage";
+import { getCurrentDate, getIsoTimestamp, getLocalDateTimeInputValue } from "../utils/dates";
 
 const createId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-const now = () => new Date().toISOString();
+const now = () => getIsoTimestamp();
 
 function emptyTransaction(): Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'> {
-    const now = new Date();
-    const tzOffset = now.getTimezoneOffset() * 60000; // offset in milliseconds
-    const localDateTime: string = new Date(now.getTime() - tzOffset).toISOString().slice(0, 16);
+    const localDateTime = getLocalDateTimeInputValue(getCurrentDate());
 
     return { date: localDateTime, accountId: '', type: 'expense', categoryId: '', amount: 0, notes: '' };
 }
