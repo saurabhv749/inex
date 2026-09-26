@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FinanceData } from '../models';
 import ModalShell from '../components/ModalShell';
 import { useModal } from '../context/ModalContext';
+import { formatAssistantDate } from '../utils/dates';
 
 import CodeAgent from './engine';
 import { Message } from './engine';
@@ -32,7 +33,7 @@ function AskGemini({ data, currency, accountNames, expenseCategories, incomeCate
     const [initialMessage, setInitialMessage] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    const today = new Date().toLocaleDateString('en-Us', { day: '2-digit', month: 'long', year: 'numeric' })
+    const today = formatAssistantDate();
     const userDataInfo = `Today is ${today}\nAvailable accounts: ${accountNames}\nIncome categories: ${incomeCategories}\nExpense categories: ${expenseCategories}\nCurrency in use: ${currency}`
 
     useEffect(() => {

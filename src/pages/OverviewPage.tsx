@@ -1,6 +1,7 @@
 import Overview from "../components/Overview";
 import { FinanceData, Transaction, View } from "../models";
 import { downloadJsonFile, selectImportFile, uploadJsonFile } from "../utils/file";
+import { getCurrentMonthKey } from "../utils/dates";
 
 interface OverviewPageProps {
     data: FinanceData;
@@ -12,8 +13,7 @@ interface OverviewPageProps {
 
 function OverviewPage({ data, formatAmount, onNavigate, renderTransactions, refreshData }: OverviewPageProps) {
 
-    const currentDate = new Date();
-    const currentMonthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    const currentMonthKey = getCurrentMonthKey();
     const currentMonthTransactions = data.transactions.filter((item) => item.date.slice(0, 7) === currentMonthKey);
     const totalIncome = currentMonthTransactions
         .filter((item) => item.type === 'income')
