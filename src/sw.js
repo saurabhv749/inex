@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v2-1-2"
+const CACHE_VERSION = "v2-1-3"
 const CACHE_NAME = `finance-tracker-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `app-runtime-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
@@ -169,7 +169,7 @@ self.addEventListener('fetch', (event) => {
     }
 
     // Skip peerjs requests
-    if (url.protocol.includes('peerjs')) {
+    if (url.href.includes('peerjs') || url.pathname.includes('/peerjs/')) {
         return;
     }
 
