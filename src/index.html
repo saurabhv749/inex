@@ -5,6 +5,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#26754f" />
+  <script>
+    (function () {
+      var themeKey = 'finance-tracker:theme:v1';
+      var dataKey = 'finance-tracker:data:v1';
+      var themes = ['forest', 'ocean', 'sunset', 'berry', 'slate', 'emerald'];
+      var mode = 'light';
+      var palette = 'forest';
+
+      try {
+        var storedTheme = localStorage.getItem(themeKey);
+        var hasValidTheme = false;
+        if (storedTheme) {
+          var storedParts = storedTheme.split('|');
+          if ((storedParts[0] === 'light' || storedParts[0] === 'dark') && themes.indexOf(storedParts[1]) !== -1) {
+            mode = storedParts[0];
+            palette = storedParts[1];
+            hasValidTheme = true;
+          }
+        }
+        if (!hasValidTheme) {
+          var savedData = JSON.parse(localStorage.getItem(dataKey) || 'null');
+          var preferences = savedData && savedData.preferences;
+          if (preferences) {
+            if (preferences.theme === 'light' || preferences.theme === 'dark') mode = preferences.theme;
+            if (themes.indexOf(preferences.colorTheme) !== -1) palette = preferences.colorTheme;
+          }
+          localStorage.setItem(themeKey, mode + '|' + palette);
+        }
+      } catch (error) { }
+
+      var root = document.documentElement;
+      root.classList.add('theme-' + palette);
+      root.setAttribute('data-theme', mode);
+    })();
+  </script>
   <link rel="icon" type="image/png" href="./favicons/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="./favicons/favicon.svg" />
   <link rel="shortcut icon" href="./favicons/favicon.ico" />

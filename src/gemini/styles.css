@@ -3,12 +3,12 @@
     border-radius: var(--radius-3);
     overflow: hidden auto;
     position: relative;
-    min-height: 500px;
+    min-height: 420px;
     height: 50vh;
-    --border-color: #f0f3ee;
-    --border-color-hover: #daddd6;
-    --hint-card-surface: #f7f7f7;
-    --message-color: #fff;
+    --border-color: var(--line);
+    --border-color-hover: var(--muted);
+    --hint-card-surface: var(--surface);
+    --message-color: var(--ink-3);
     --shadow-1: 4px 4px 6px -4px rgba(0, 0, 0, 0.09);
 }
 
@@ -20,6 +20,7 @@
     min-height: 0;
     padding: var(--size-8) var(--size-4);
     min-height: 100%;
+    color: var(--primary-3);
 }
 
 .gemini-empty {
@@ -48,7 +49,7 @@
 
 .gemini-message-user {
     align-self: flex-end;
-    background: var(--primary-3);
+    background: var(--primary-1);
     color: var(--message-color);
 }
 
@@ -67,6 +68,7 @@
     cursor: pointer;
     outline: 1px solid var(--border-color);
     box-shadow: var(--shadow-1);
+    font-size: var(--font-size-2);
 
     &:hover {
         outline-color: var(--border-color-hover);
@@ -76,7 +78,7 @@
 .gemini-message-label {
     display: block;
     margin-bottom: var(--size-2);
-    color: var(--ink-1);
+    color: var(--muted);
     font-size: var(--font-size-1);
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -130,6 +132,7 @@
     border-radius: var(--radius-2);
     font: inherit;
     background: transparent;
+    color: inherit;
 }
 
 .gemini-composer input:focus {
@@ -154,31 +157,6 @@
 .privacy-notice {
     font-size: var(--font-size-1);
     text-align: center;
-}
-
-.theme-dark {
-    .gemini-chat {
-        --border-color: #394135;
-        --border-color-hover: #5b6954;
-        --hint-card-surface: #2a3731;
-        --message-color: #fff;
-    }
-
-    .query-chip {
-        color: var(--ink-3);
-    }
-
-    .gemini-message-user {
-        background: #636765;
-    }
-
-    .gemini-message-label {
-        color: var(--ink-3);
-    }
-
-    .gemini-message-assistant {
-        color: var(--ink-4);
-    }
 }
 
 @media (max-width: 640px) {

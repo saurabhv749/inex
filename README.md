@@ -11,6 +11,12 @@
 ![agent memory](./assets/agent-memory.png)
 </details>
 
+<details>
+   <summary>Click here to view available themes</summary>
+
+![agent memory](./assets/app-themes.gif)
+</details>
+
 ---
 The project is designed for people who want a simple view of their financial activity without the overhead of a large finance platform. It provides a focused workspace for recording transactions, reviewing spending patterns, managing accounts and categories, and adjusting personal preferences.
 
@@ -25,7 +31,7 @@ The project is designed for people who want a simple view of their financial act
 - 🏷️ Income and expense category management.
 - 📉 Spending comparison and category breakdown views.
 - 📥 Import and export of application data.
-- ⚙️ Currency and theme preferences.
+- ⚙️ Currency preferences and six color themes: forest, ocean, sunset, berry, slate, and emerald.
 - 💻 Responsive layout for desktop and smaller screens.
 - 🔁 Device sync on demand.
 
@@ -40,6 +46,11 @@ Financial clarity is easier to maintain when recording an expense takes very lit
 - Make decisions from their own data rather than relying on memory.
 
 [InEx](https://saurabhv749.github.io/inex/) aims to make that daily workflow approachable, readable, and practical.
+
+## Updates
+
+- **v2.2.0**:
+   - Users now have the option to choose from six color themes: forest, ocean, sunset, berry, slate, and emerald.
 
 ## Technology
 

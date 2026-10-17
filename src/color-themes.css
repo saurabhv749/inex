@@ -1,0 +1,153 @@
+/* THEME 1: FOREST */
+.theme-forest {
+    --page: #f5f6f2;
+    --tint-color: #f5f6f2;
+    --primary-base: #26754f;
+    --danger-base: #ad4e4e;
+    --ink-base: #177536;
+}
+
+.theme-forest[data-theme="dark"] {
+    --page: #1a1a1a;
+    --tint-color: #000000;
+    --primary-base: #39e996;
+    --danger-base: #ffc3c3;
+    --ink-base: #c8ebd5;
+}
+
+/* THEME 2: OCEAN */
+.theme-ocean {
+    --page: #f3f7fb;
+    --tint-color: #f3f7fb;
+    --primary-base: #1e5a96;
+    --danger-base: #cf810b;
+    --ink-base: #4c5a6d;
+}
+
+.theme-ocean[data-theme="dark"] {
+    --page: #070c10;
+    --tint-color: #000000;
+    --primary-base: #54a4f3;
+    --danger-base: #f9ae3b;
+    --ink-base: #b4c6dd;
+}
+
+/* THEME 3: SUNSET */
+.theme-sunset {
+    --page: #faf8f6;
+    --tint-color: #faf8f6;
+    --primary-base: #d97706;
+    --danger-base: #458d9f;
+    --ink-base: #793b10;
+}
+
+.theme-sunset[data-theme="dark"] {
+    --page: #120e09;
+    --tint-color: #000000;
+    --primary-base: #fb9015;
+    --danger-base: #6b9ba7;
+    --ink-base: #f7cdb0;
+}
+
+/* THEME 4: BERRY */
+.theme-berry {
+    --page: #faf7fc;
+    --tint-color: #faf7fc;
+    --primary-base: #7c3aed;
+    --danger-base: #d34a89;
+    --ink-base: #715887;
+}
+
+.theme-berry[data-theme="dark"] {
+    --page: #0f0516;
+    --tint-color: #000000;
+    --primary-base: #bb93ff;
+    --danger-base: #eb61a0;
+    --ink-base: #b795d5;
+}
+
+/* THEME 5: SLATE */
+.theme-slate {
+    --page: #e4e5e5;
+    --tint-color: #f3f3f3;
+    --primary-base: #4b5563;
+    --danger-base: #4e7dad;
+    --ink-base: #737373;
+}
+
+.theme-slate[data-theme="dark"] {
+    --page: #212121;
+    --tint-color: #1a1a1a;
+    --primary-base: #d7d8d9;
+    --danger-base: #8192a3;
+    --ink-base: #efefef;
+}
+
+/* THEME 6: EMERALD */
+.theme-emerald {
+    --page: #effffb;
+    --tint-color: #fcfffe;
+    --primary-base: #0d9488;
+    --danger-base: #dd9f4c;
+    --ink-base: #0c694f;
+}
+
+.theme-emerald[data-theme="dark"] {
+    --page: #060c0a;
+    --tint-color: #000000;
+    --primary-base: #77ffd1;
+    --danger-base: #d3a364;
+    --ink-base: #b1f3e1;
+}
+
+html[data-theme="dark"] {
+    --surface: color-mix(in oklch, var(--page) 10%, var(--tint-color));
+    --surface-muted: color-mix(in oklch, var(--page) 5%, var(--tint-color));
+    --muted: color-mix(in oklch, var(--ink-base) 80%, var(--page));
+    --line: color-mix(in oklch, var(--primary-base) 15%, var(--tint-color));
+
+    --primary-1: color-mix(in oklch, var(--primary-base) 5%, var(--page));
+    --primary-2: color-mix(in oklch, var(--primary-base) 50%, var(--page));
+    --primary-3: color-mix(in oklch, var(--primary-base) 60%, var(--page));
+    --primary-4: color-mix(in oklch, var(--primary-base) 95%, var(--page));
+    --primary: color-mix(in oklch, var(--primary-base) 90%, var(--page));
+
+    --primary-soft: color-mix(in oklch, var(--primary-base) 25%, var(--page));
+    --primary-deep: color-mix(in oklch, var(--primary-base) 80%, var(--page));
+
+    --danger-1: color-mix(in oklch, var(--danger-base) 5%, var(--page));
+    --danger-2: color-mix(in oklch, var(--danger-base) 50%, var(--page));
+    --danger-3: color-mix(in oklch, var(--danger-base) 80%, var(--page));
+    --danger-4: color-mix(in oklch, var(--danger-base) 95%, var(--page));
+
+    --ink-1: color-mix(in oklch, var(--ink-base) 10%, var(--page));
+    --ink-2: color-mix(in oklch, var(--ink-base) 35%, var(--page));
+    --ink-3: color-mix(in oklch, var(--ink-base) 90%, var(--page));
+    --ink-4: color-mix(in oklch, var(--ink-base) 95%, var(--page));
+}
+
+:root {
+    --surface: color-mix(in oklch, var(--page) 10%, var(--tint-color));
+    --surface-muted: color-mix(in oklch, var(--page) 50%, var(--tint-color));
+    --muted: color-mix(in oklch, var(--ink-base) 45%, var(--page));
+    --line: color-mix(in oklch, var(--primary-base) 15%, var(--tint-color));
+
+    --primary-1: color-mix(in oklch, var(--primary-base) 10%, var(--page));
+    --primary-2: color-mix(in oklch, var(--primary-base) 35%, var(--page));
+    --primary-3: color-mix(in oklch, var(--primary-base) 75%, var(--page));
+    --primary-4: color-mix(in oklch, var(--primary-base) 85%, var(--page));
+    --primary: color-mix(in oklch, var(--primary-base) 90%, var(--page));
+
+    --primary-soft: color-mix(in oklch, var(--primary-base) 25%, var(--page));
+    --primary-deep: color-mix(in oklch, var(--primary-base) 80%, var(--page));
+
+    --danger-1: color-mix(in oklch, var(--danger-base) 10%, var(--page));
+    --danger-2: color-mix(in oklch, var(--danger-base) 35%, var(--page));
+    --danger-3: color-mix(in oklch, var(--danger-base) 75%, var(--page));
+    --danger-4: color-mix(in oklch, var(--danger-base) 95%, var(--page));
+
+    --ink-1: color-mix(in oklch, var(--ink-base) 10%, var(--page));
+    --ink-2: color-mix(in oklch, var(--ink-base) 35%, var(--page));
+    --ink-3: color-mix(in oklch, var(--ink-base) 75%, var(--page));
+    --ink-4: color-mix(in oklch, var(--ink-base) 95%, var(--page));
+}

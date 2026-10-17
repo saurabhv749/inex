@@ -3,6 +3,8 @@ export type Modal = 'transaction' | 'account' | 'category' | 'preferences' | 'ai
 export type OptionsType = 'accounts' | 'categories';
 export type OptionTitleType = 'Accounts' | 'Categories';
 export type TransactionType = 'income' | 'expense';
+export type ColorTheme = 'forest' | 'ocean' | 'sunset' | 'berry' | 'slate' | 'emerald';
+export type ThemeMode = 'light' | 'dark';
 
 export interface Transaction {
     id: string;
@@ -30,7 +32,8 @@ export interface Category {
 }
 
 export interface Preferences {
-    theme: 'light' | 'dark';
+    theme: ThemeMode;
+    colorTheme?: ColorTheme;
     decimalPlaces: number;
     currencySign: string;
 }
