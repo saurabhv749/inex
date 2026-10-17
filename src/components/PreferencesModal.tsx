@@ -1,8 +1,17 @@
 import { useState } from 'react';
-import { Preferences } from '../models';
+import { ColorTheme, Preferences } from '../models';
 import { defaultCurrencies } from '../utils/currency';
 import ModalShell from './ModalShell';
 import { useModal } from '../context/ModalContext';
+
+const colorThemes: { value: ColorTheme; label: string; swatch: string }[] = [
+    { value: 'forest', label: 'Forest', swatch: '#26754f' },
+    { value: 'ocean', label: 'Ocean', swatch: '#1e5a96' },
+    { value: 'sunset', label: 'Sunset', swatch: '#d97706' },
+    { value: 'berry', label: 'Berry', swatch: '#7c3aed' },
+    { value: 'slate', label: 'Slate', swatch: '#4b5563' },
+    { value: 'emerald', label: 'Emerald', swatch: '#0d9488' },
+];
 
 interface PreferencesModalProps {
     preferences: Preferences;
@@ -48,6 +57,25 @@ function PreferencesModal({ preferences, onSave }: PreferencesModalProps) {
                         type="checkbox"
                     />
                 </label>
+
+                <fieldset className="wide-field theme-picker">
+                    <legend>Color theme</legend>
+                    <div className="theme-options">
+                        {colorThemes.map(({ value, label, swatch }) => (
+                            <label className="theme-option" key={value}>
+                                <input
+                                    checked={(draft.colorTheme ?? 'forest') === value}
+                                    name="colorTheme"
+                                    onChange={() => setDraft({ ...draft, colorTheme: value })}
+                                    type="radio"
+                                    value={value}
+                                />
+                                <span className="theme-swatch" style={{ backgroundColor: swatch }} aria-hidden="true" />
+                                <span>{label}</span>
+                            </label>
+                        ))}
+                    </div>
+                </fieldset>
 
                 <label className="wide-field">GEMINI API key
                     <input

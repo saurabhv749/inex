@@ -5,30 +5,7 @@
   font-family: "Inter", "Trebuchet MS", "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --shadow: 0 16px 38px rgba(32, 47, 37, 0.07);
-
-  /* colors: https://maketintsandshades.com/#colors=26754f,e65a3e,1f2521&hashtag=0&steps=5 */
-  --page: #f5f6f2;
-  --surface: #ffffff;
-  --surface-muted: #ebeee8;
-  --muted: #79817a;
-  --line: #dfe4dd;
-
-  --primary: #26754f;
-  --primary-deep: #1d593c;
-  --primary-soft: #d9eade;
-  --primary-1: #d4e3dc;
-  --primary-2: #519172;
-  --primary-3: #26754f;
-  --primary-4: #17462f;
-  --danger-1: #faded8;
-  --danger-2: #f09c8b;
-  --danger-3: #e65a3e;
-  --danger-4: #b84832;
-  --ink-1: #a5a8a6;
-  --ink-2: #797c7a;
-  --ink-3: #4c514d;
-  --ink-4: #1f2521;
+  --shadow: 0 8px 10px rgba(32, 47, 37, 0.05);
 
   /* radius */
   --radius-circle: 50%;
@@ -85,37 +62,13 @@
   --content-max-width: 1080px;
 }
 
-.theme-dark {
-  color-scheme: dark;
-  --page: #18201b;
-  --surface: #222c25;
-  --surface-muted: #2c392f;
-  --muted: #f3f4f3;
-  --line: #39493d;
-  --primary: #58b177;
-  --primary-deep: #337342;
-  --primary-soft: #284b35;
-
-  --primary-1: #26754f;
-  --primary-2: #679e84;
-  --primary-3: #a8c8b9;
-  --primary-4: #d4e3dc;
-  --danger-1: #a13f2b;
-  --danger-2: #ee8c78;
-  --danger-3: #f5bdb2;
-  --danger-4: #fdefec;
-  --ink-1: #626664;
-  --ink-2: #797c7a;
-  --ink-3: #bcbebc;
-  --ink-4: #e9e9e9;
-}
-
-
 * {
   box-sizing: border-box;
 }
 
 body {
+  background: var(--page);
+  color: var(--ink-3);
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
@@ -130,12 +83,18 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+input::placeholder {
+  color: var(--muted);
+}
+
 .app-shell {
   background: var(--page);
   color: var(--ink-3);
   display: flex;
   min-height: 100vh;
   transition: background 180ms ease, color 180ms ease;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-2) var(--surface);
 }
 
 .sidebar {
@@ -251,6 +210,7 @@ button:focus-visible {
   height: 100vh;
   overflow: hidden auto;
   padding: var(--p-9) var(--p-7);
+  padding-bottom: calc(2 * var(--p-9));
 }
 
 .topbar {
@@ -288,7 +248,7 @@ button:focus-visible {
 
 .button-primary {
   background: var(--primary);
-  color: white;
+  color: var(--primary-1);
 }
 
 .button-primary:hover {
@@ -375,7 +335,7 @@ button:focus-visible {
 
 .panel-accent span:nth-child(3) {
   height: 112px;
-  background: #93baa7;
+  background: color-mix(in srgb, var(--primary-3) 50%, white);
 }
 
 .panel-accent span:nth-child(4) {
@@ -384,7 +344,8 @@ button:focus-visible {
 
 .panel-accent span:nth-child(5) {
   height: 130px;
-  background: #bed6ca;
+  background: color-mix(in srgb, var(--primary-3) 30%, white);
+
 }
 
 .metric-card,
@@ -440,11 +401,13 @@ button:focus-visible {
 
 .metric-card.income {
   background: var(--primary-1);
+  border: 1px solid var(--primary-2);
   color: var(--primary-3);
 }
 
 .metric-card.expense {
   background: var(--danger-1);
+  border: 1px solid var(--danger-2);
   color: var(--danger-4);
 }
 
@@ -1084,7 +1047,7 @@ button:focus-visible {
 
 .filter-group select {
   background: var(--surface-muted);
-  border: 1px solid transparent;
+  border: 1px solid var(--line);
   border-radius: var(--radius-2);
   color: var(--ink-3);
   font: inherit;
@@ -1095,7 +1058,7 @@ button:focus-visible {
 
 .filter-group input[type="date"] {
   background: var(--surface-muted);
-  border: 1px solid transparent;
+  border: 1px solid var(--line);
   border-radius: var(--radius-2);
   color: var(--ink-3);
   font: inherit;
@@ -1177,6 +1140,7 @@ button:focus-visible {
 }
 
 .transaction-main {
+  color: var(--danger-3);
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -1490,6 +1454,58 @@ button:focus-visible {
 .preference-switch input:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+.theme-picker {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.theme-picker legend {
+  color: var(--muted);
+  font-size: var(--font-size-1);
+  margin-bottom: var(--size-2);
+}
+
+.theme-options {
+  display: grid;
+  gap: var(--size-2) var(--size-6);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-grid .theme-option {
+  align-items: center;
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-3);
+  color: var(--ink-3);
+  cursor: pointer;
+  flex-direction: row;
+  gap: var(--size-2);
+  font-size: var(--font-size-2);
+  min-height: var(--size-6);
+  padding: var(--size-4) var(--size-2);
+}
+
+.theme-option input {
+  accent-color: var(--primary);
+  flex: 0 0 auto;
+  margin: 0;
+  min-height: 0;
+  padding: 0;
+  width: auto;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.theme-swatch {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-circle);
+  height: var(--size-4);
+  width: var(--size-4);
 }
 
 .modal-actions {

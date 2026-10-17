@@ -1,10 +1,13 @@
 import './App.css';
-import React, { useState } from 'react';
+import './color-themes.css';
+import React, { useLayoutEffect, useState } from 'react';
 import { OptionsType, Transaction, View } from './models';
 import { useModal } from './context/ModalContext';
 import { useFinanceData } from './hooks/useFinanceData';
+import { defaultColorTheme } from './constants';
 import { currencyDecimalPlaces } from './utils/currency';
 import { sortByDateDescending } from './utils/dates';
+import { applyTheme } from './utils/storage';
 
 import TransactionList from './components/TransactionList';
 import { PreferencesModal, RecordModal, TransactionModal } from './components/Modal'
@@ -15,6 +18,7 @@ import SyncModal from './components/SyncModal';
 import OverviewPage from './pages/OverviewPage';
 import TransactionsPage from './pages/TransactionsPage';
 import OptionsManagerPage from './pages/OptionsManagerPage';
+
 import { SettingsIcon, AccountsIcon, CategoriesIcon, OverviewIcon, TransactionsIcon, GeminiAIIcon, SyncIcon } from './icons';
 import AskGemini from './gemini/AskGemini';
 
@@ -36,6 +40,10 @@ export function App() {
 
     const { modal, setModal, setRecordError } = useModal();
     const { data, refreshFinanceData, openTransaction, saveTransaction, deleteTransaction, deleteAccount, deleteCategory, saveAccount, saveCategory, savePreferences, transactionDraft, setTransactionDraft, editingTransaction } = useFinanceData()
+
+    useLayoutEffect(() => {
+        applyTheme(data.preferences.theme, data.preferences.colorTheme ?? defaultColorTheme);
+    }, [data.preferences.theme, data.preferences.colorTheme]);
 
     const currency = data.preferences.currencySign;
     const decimalPlaces = currencyDecimalPlaces[currency]
@@ -107,7 +115,7 @@ export function App() {
     }
 
     return (
-        <div className={data.preferences.theme === 'dark' ? 'app-shell theme-dark' : 'app-shell'}>
+        <div className="app-shell">
             <aside className="sidebar">
                 <div className="brand">
                     <span className="brand-mark">IE</span>

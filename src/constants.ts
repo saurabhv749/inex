@@ -1,5 +1,7 @@
-import { FinanceData } from "./models";
+import { ColorTheme, FinanceData, ThemeMode } from "./models";
 
+export const defaultColorMode: ThemeMode = 'light'
+export const defaultColorTheme: ColorTheme = 'forest'
 export const defaultFinanceData: FinanceData = {
     transactions: [],
     accounts: [
@@ -26,7 +28,8 @@ export const defaultFinanceData: FinanceData = {
         { id: 'cat-exp-9', name: 'Miscellaneous', icon: 'more-horizontal', type: 'expense' },
     ],
     preferences: {
-        theme: 'light',
+        theme: defaultColorMode,
+        colorTheme: defaultColorTheme,
         decimalPlaces: 2,
         currencySign: "₹",
     },

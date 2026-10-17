@@ -1,7 +1,34 @@
-import { FinanceData } from '../models';
+import { FinanceData, ColorTheme, ThemeMode } from '../models';
 import { defaultFinanceData } from '../constants';
 
 const STORAGE_KEY = 'finance-tracker:data:v1';
+const THEME_STORAGE_KEY = 'finance-tracker:theme:v1';
+const colorThemes = ['forest', 'ocean', 'sunset', 'berry', 'slate', 'emerald'] as const;
+const themeClasses = colorThemes.map(c => 'theme-' + c)
+
+function withStoredTheme(data: FinanceData): FinanceData {
+    try {
+        const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+        if (!storedTheme) return data;
+
+        const [theme, colorPalette] = storedTheme.split('|');
+        if ((theme !== 'light' && theme !== 'dark') || !colorThemes.includes(colorPalette as ColorTheme)) {
+            return data;
+        }
+
+        return { ...data, preferences: { ...data.preferences, theme, colorTheme: colorPalette as ColorTheme } };
+    } catch {
+        return data;
+    }
+}
+
+export function applyTheme(theme: ThemeMode, colorTheme: NonNullable<ColorTheme> = 'forest'): void {
+    const root = document.documentElement;
+    root.classList.remove(...themeClasses, 'theme-dark');
+
+    root.classList.add(`theme-${colorTheme}`);
+    root.setAttribute('data-theme', theme);
+}
 
 function isFinanceData(value: unknown): value is FinanceData {
     if (!value || typeof value !== 'object') return false;
@@ -44,6 +71,9 @@ function isFinanceData(value: unknown): value is FinanceData {
         preferences !== undefined &&
         (preferences.theme === 'light' || preferences.theme === 'dark'
         ) &&
+        (preferences.colorTheme === undefined ||
+            ['forest', 'ocean', 'sunset', 'berry', 'slate', 'emerald'].some((theme) => theme === preferences.colorTheme)
+        ) &&
         typeof preferences.decimalPlaces === 'number' &&
         typeof preferences.currencySign === 'string'
     );
@@ -52,21 +82,23 @@ function isFinanceData(value: unknown): value is FinanceData {
 export function loadFinanceData(): FinanceData {
     try {
         const stored = window.localStorage.getItem(STORAGE_KEY);
-        if (!stored) return structuredClone(defaultFinanceData);
+        if (!stored) return withStoredTheme(structuredClone(defaultFinanceData));
 
         const parsed: unknown = JSON.parse(stored);
-        return isFinanceData(parsed) ? parsed : structuredClone(defaultFinanceData);
+        return withStoredTheme(isFinanceData(parsed) ? parsed : structuredClone(defaultFinanceData));
     } catch {
-        return structuredClone(defaultFinanceData);
+        return withStoredTheme(structuredClone(defaultFinanceData));
     }
 }
 
 export function saveFinanceData(data: FinanceData): void {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    window.localStorage.setItem(THEME_STORAGE_KEY, `${data.preferences.theme}|${data.preferences.colorTheme ?? 'forest'}`);
 }
 
 export function clearFinanceData(): void {
     window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem(THEME_STORAGE_KEY);
 }
 
 export function exportFinanceData(data: FinanceData): string {
@@ -76,6 +108,7 @@ export function exportFinanceData(data: FinanceData): string {
 export function importFinanceData(serializedData: string): boolean {
     const parsed: unknown = JSON.parse(serializedData);
     if (!isFinanceData(parsed)) {
+        alert('The selected file is not a valid Finance Tracker export.');
         throw new Error('The selected file is not a valid Finance Tracker export.');
     }
     saveFinanceData(parsed)

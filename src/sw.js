@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v2-1-3"
+const CACHE_VERSION = "v2-2-0"
 const CACHE_NAME = `finance-tracker-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `app-runtime-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
@@ -159,19 +159,21 @@ self.addEventListener('fetch', (event) => {
     const url = new URL(request.url);
 
     // Skip non-GET requests
-    if (request.method !== 'GET') {
-        return;
-    }
+    if (request.method !== 'GET') return;
 
     // Skip chrome extensions and other non-http(s) protocols
-    if (!url.protocol.startsWith('http')) {
-        return;
-    }
+    if (!['http:', 'https:'].includes(url.protocol)) return;
 
     // Skip peerjs requests
-    if (url.href.includes('peerjs') || url.pathname.includes('/peerjs/')) {
-        return;
-    }
+    if (url.href.includes('peerjs') || url.pathname.includes('/peerjs/')) return;
+
+    // Let the browser handle local development requests normally.
+    const isLocalDev =
+        url.hostname === 'localhost' ||
+        url.hostname === '127.0.0.1' ||
+        url.hostname === '[::1]';
+
+    if (isLocalDev) return;
 
     // Determine caching strategy based on URL
     if (isCacheFirst(url)) {
