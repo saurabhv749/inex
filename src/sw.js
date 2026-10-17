@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v2-2-0"
+const CACHE_VERSION = "v2-2-1"
 const CACHE_NAME = `finance-tracker-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `app-runtime-${CACHE_VERSION}`;
 const ASSETS_TO_CACHE = [
